@@ -1,0 +1,17 @@
+{
+    "name": "Singular",
+    "version": "0.0.1",
+    "license": "MIT",
+    "author": {
+    	"name": "Brandon Keown",
+    	"email": "me@brandonkeown.com"
+    },
+    "main": "index.js",
+    "repository": {
+    	"type": "git",
+    	"url": "http://github.com/theqabalist/singularjs"
+    }
+    "devDependencies": {
+        "jasmine-node": "^1.14.5"
+    }
+}
