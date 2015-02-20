@@ -111,4 +111,11 @@ describe("core", function () {
             expect(fancy).toThrow();
         });
     });
+
+    describe("toList", function () {
+        it("should safely support working with nested lists", function () {
+            var d = [[1], [2], [3]];
+            expect(core.toList(d)).toEqual(d);
+        });
+    });
 });

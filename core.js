@@ -2,18 +2,39 @@ module.exports = (function () {
     "use strict";
     function id(x) { return x; }
 
-    function reduce(f, acc, coll) {
-        var i = 0,
-            len = coll.length;
-        for (i; i < len; i += 1) {
-            acc = f(acc, coll[i]);
+    function reduceObj(f, acc, obj) {
+        var i;
+        for (i in obj) {
+            if (obj.hasOwnProperty(i)) {
+                acc = f(acc, obj[i], i);
+            }
         }
         return acc;
     }
 
+    function reduceArray(f, acc, arr) {
+        var i = 0,
+            len = arr.length;
+        for (i; i < len; i += 1) {
+            acc = f(acc, arr[i], i);
+        }
+        return acc;
+    }
+
+    function isObject(x) { return typeof x === 'object'; }
+    function isArray(x) {
+        return isObject(x) && x instanceof Array;
+    }
+
+    function reduce(f, acc, coll) {
+        return isArray(coll) ? reduceArray(f, acc, coll) : reduceObj(f, acc, coll);
+    }
+
     function map(f, coll) {
         return reduce(function (acc, item) {
-            return acc.concat(f(item));
+            var val = f(item);
+            val = isArray(val) ? [val] : val;
+            return acc.concat(val);
         }, [], coll);
     }
 
