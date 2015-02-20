@@ -45,5 +45,70 @@ describe("core", function () {
             var add5 = core.curryN(2)(variadic)(5);
             expect(add5(10)).toBe(15);
         });
+
+        it("should allow immediate evaluation", function () {
+            var curried = core.curry(add);
+            expect(curried(5, 10)).toBe(15);
+        });
+    });
+
+    describe("property", function () {
+        it("should allow getting a property off an arbitrary object", function () {
+            var f = core.property("hello");
+            expect(f({hello: "goodbye"})).toEqual("goodbye");
+        });
+    });
+
+    function isString(x) { return typeof x === 'string'; }
+    function isNumber(x) { return typeof x === 'number'; }
+
+    describe("multi", function () {
+        it("should provide a multidispatch builder.", function () {
+            var fancy = core
+                .multi()
+                .method(isString, function (x) { return x + x; })
+                .method(isNumber, function (x) { return x * x; })
+                .otherwise(core.id);
+            expect(fancy("h")).toEqual("hh");
+            expect(fancy(5)).toBe(25);
+            expect(fancy(null)).toBe(null);
+        });
+
+        it("should allow curryability under restriction", function () {
+            function addStrings(x, y) { return x + y; }
+            function multNumbers(x, y) { return x * y; }
+            function asPair(x, y) { return [x, y]; }
+            var fancy = core
+                .multi(2)
+                .method(isString, addStrings)
+                .method(isNumber, multNumbers)
+                .otherwise(asPair),
+                fancy1 = fancy("h"),
+                fancy2 = fancy(5),
+                fancy3 = fancy(undefined);
+
+            expect(fancy1("e")).toEqual("he");
+            expect(fancy2(10)).toBe(50);
+            expect(fancy3(null)).toEqual([undefined, null]);
+        });
+
+        it("should allow immutable reopening", function () {
+            function isUndefined(x) { return x === undefined; }
+            var fancy = core
+                .multi()
+                .method(isString, function (x) { return x + x; })
+                .method(isNumber, function (x) { return x * x; })
+                .otherwise(core.id)
+                .method(isUndefined, function () { return "undefined"; });
+            expect(fancy("h")).toEqual("hh");
+            expect(fancy(5)).toBe(25);
+            expect(fancy(undefined)).toEqual("undefined");
+            expect(fancy(null)).toBe(null);
+        });
+
+        it("should throw exceptions if no otherwise is provided", function () {
+            var fancy = core.multi();
+            expect(fancy).toThrow();
+        });
     });
 });

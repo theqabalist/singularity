@@ -10,7 +10,7 @@
     "repository": {
     	"type": "git",
     	"url": "http://github.com/theqabalist/singularjs"
-    }
+    },
     "devDependencies": {
         "jasmine-node": "^1.14.5"
     }
