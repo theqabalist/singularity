@@ -1,10 +1,26 @@
 module.exports = (function (_) {
     "use strict";
     /*jslint unparam: true*/
+
+    function hasMethod(name) {
+        return {
+            onParam: function (param) {
+                return function () {
+                    var args = _.toList(arguments),
+                        which = args[param],
+                        prop = which[name];
+                    return prop ? typeof prop === 'function' : false;
+                };
+            }
+        };
+    }
+
     return {
         fmap: _.multi(2)
-            .method(function (f, m) { return typeof m.map === 'function'; }, function (f, m) {
+            .method(hasMethod("map").onParam(1), function (f, m) {
                 return m.map(f);
-            })
+            }),
+        join: function (m) { return m.flatMap(_.id); },
+        destructure: function (adt) { return adt.destructure(); }
     };
 }(require("./core")));

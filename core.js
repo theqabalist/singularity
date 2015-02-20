@@ -91,6 +91,7 @@ module.exports = (function () {
     }
     return {
         partial: partial,
+        constant: function (x) { return function () { return x; }; },
         curry: curry,
         curryN: curry(curryN),
         toList: toList,
