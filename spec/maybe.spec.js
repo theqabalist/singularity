@@ -33,7 +33,7 @@ describe("Maybe", function () {
         });
     });
 
-    describe("ap", function () {
+    describe(".ap", function () {
         it("should serially apply monadic values", function () {
             var m = Maybe.lift(function (a, b) { return a + b; });
 
