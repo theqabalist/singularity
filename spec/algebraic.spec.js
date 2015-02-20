@@ -44,5 +44,14 @@ describe("algebraic", function () {
                 t.Just.from(5).map(function (x) { return x; });
             }).toThrow();
         });
+
+        it("should provide a general destructure mechanism on the base type", function () {
+            var f = type.Maybe.destructure()
+                .Just(function (x) { return x; })
+                .None(function () { return undefined; });
+
+            expect(f(type.Just.from(5))).toBe(5);
+            expect(f(type.None.from())).toBeUndefined();
+        });
     });
 });

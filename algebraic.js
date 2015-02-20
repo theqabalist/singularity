@@ -3,6 +3,10 @@ module.exports = (function (_) {
     function noSuchImplementation(type, method) {
         throw "No implementation for " + method + " on type " + type;
     }
+
+    function noSuchPattern(type) {
+        throw "Destructure has no pattern for " + type;
+    }
     function data(typeName, subtypes) {
         var impls = {},
             fromBuilder = function (subtypeName) {
@@ -25,6 +29,30 @@ module.exports = (function (_) {
                 s["is" + typeName] = true;
                 return s;
             },
+            buildDestructure = function () {
+                var dimpls = {};
+                function buildMethod() {
+                    var names = _.keys(subtypes),
+                        method = _.reduce(function (m, name) {
+                            return m.method(_.property("is" + name), function (x) {
+                                var impl = dimpls[name] || _.partial(noSuchPattern, name);
+                                return x.val(impl);
+                            });
+                        }, _.multi(), names);
+
+                    method = _.reduce(function (m, name) {
+                        m[name] = function (f) {
+                            dimpls[name] = f;
+                            return buildMethod();
+                        };
+                        return m;
+                    }, method, names);
+
+                    return method;
+                }
+
+                return buildMethod();
+            },
             buildConstructors = function () {
                 var cs = _.reduce(function (type, subtypeSize, subtypeName) {
                     var builder = _.partial(fromBuilder, subtypeName);
@@ -37,6 +65,10 @@ module.exports = (function (_) {
                 cs.implements = function (key, spec) {
                     impls[key] = spec;
                     return buildConstructors();
+                };
+
+                cs[typeName] = {
+                    destructure: buildDestructure
                 };
 
                 return cs;

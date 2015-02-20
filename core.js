@@ -38,6 +38,14 @@ module.exports = (function () {
         }, [], coll);
     }
 
+    /*jslint unparam: true*/
+    function keys(obj) {
+        return reduce(function (acc, value, key) {
+            return acc.concat(key);
+        }, [], obj);
+    }
+    /*jslint unparam: false*/
+
     function toList(listy) {
         return map(id, listy);
     }
@@ -74,24 +82,35 @@ module.exports = (function () {
         return h[x];
     }
 
+    function isFunction(x) {
+        return typeof x === 'function';
+    }
+
     function multi(curryOrder) {
         var methods = [],
-            other = function () { throw "No predicate matches inputs."; },
+            other = function () {
+                var args = toList(arguments);
+                throw "No predicate matches inputs: " + args;
+            },
             method,
             otherwise;
 
         function buildMethod() {
             var doCurry = curryOrder ? partial(curryN, curryOrder) : id,
                 newMethod = doCurry(function () {
-                    var args = toList(arguments);
-                    return reduce(function (acc, item) {
-                        var pred = item[0],
-                            g = item[1];
-                        if (!acc && pred.apply(null, args)) {
-                            return g.apply(null, args);
-                        }
-                        return acc;
-                    }, undefined, methods) || other.apply(null, args);
+                    var args = toList(arguments),
+                        result = reduce(function (acc, item) {
+                            var pred = item[0],
+                                g = item[1],
+                                res = pred.apply(null, args);
+
+                            if (!acc.match && res && !isFunction(res)) {
+                                acc.value = g.apply(null, args);
+                                acc.match = true;
+                            }
+                            return acc;
+                        }, {value: undefined, match: false}, methods);
+                    return result.match ? result.value : other.apply(null, args);
                 });
             newMethod.method = method;
             newMethod.otherwise = otherwise;
@@ -121,6 +140,7 @@ module.exports = (function () {
         head: first,
         tail: rest,
         multi: multi,
+        keys: keys,
         id: id,
         property: curry(property),
         reduce: curry(reduce)
