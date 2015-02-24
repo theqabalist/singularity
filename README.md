@@ -70,3 +70,15 @@ In this instance, it doesn't make sense to "lift" from a Just or a None, and bec
 the best facility for type based dispatch unless you are using objects, we can't easily use and extend a polymorphic
 ```lift``` function, as we need to know what type we are lifting into.  Placing this on the t.Maybe object then makes
 the most sense.
+
+### Destructuring
+Destructuring is a common form of pattern matching with algebraic data types in Haskell.  While full destructuring is not supported by ES5, a limited form of destructuring based on type is supported by the algebraic data type provider.
+```javascript
+var isJust = type.Maybe
+    .destructure()
+    .Just(function () { return true; })
+    .None(function () { return false; }),
+    inst = type.Just.from(5);
+
+isJust(inst) === true;
+```
