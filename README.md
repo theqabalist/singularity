@@ -1,7 +1,7 @@
 # singularjs
-The goal of singular is to provide reference implementations for all major monads documented [here](http://en.wikipedia.org/wiki/Monad_%28functional_programming%29).
+The goal of singular is to provide reference implementations for [all major monads](http://en.wikipedia.org/wiki/Monad_%28functional_programming%29), [all major monad transformers](http://en.wikipedia.org/wiki/Monad_transformer), [a selection of comonads](http://en.wikipedia.org/wiki/Monad_(functional_programming)#Comonads) and [arrows](http://en.wikipedia.org/wiki/Arrow_%28computer_science%29).
 
-These include:
+## Monads
 
 * Maybe/Option
 * IO
@@ -27,6 +27,19 @@ Additionally, on the type constructors are provided
 * destructure (provides basic type pattern matched dispatch)
 * from (available where sensible, acts as a semi-intelligent constructor or return function)
 * lift (lifts a function into a monadically aware function)
+
+## Monad Transformers
+* Option Transformer
+* Exception Transformer
+* Reader Transformer
+* State Transformer
+* Writer Transformer
+* Continuation Transformer
+
+## Comonads
+* Product
+* Function
+* Costate
 
 ## Algebraic Data Type
 Because javascript has no syntactic concept of algebraic data types, like Haskell does, a generic
