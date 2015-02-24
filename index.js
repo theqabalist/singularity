@@ -1,6 +1,9 @@
+/*global
+    window: true
+*/
 module.exports = (function (adt, either, iface, maybe) {
     "use strict";
-    return {
+    var obj = {
         adt: adt,
         monad: {
             Maybe: maybe.Maybe,
@@ -14,6 +17,12 @@ module.exports = (function (adt, either, iface, maybe) {
         destructure: iface.destructure,
         join: iface.join
     };
+
+    if (window) {
+        window.S = obj;
+    }
+
+    return obj;
 }(
     require("./algebraic"),
     require("./either"),
