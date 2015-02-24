@@ -1,5 +1,5 @@
-# singularjs
-The goal of singular is to provide reference implementations for [all major monads](http://en.wikipedia.org/wiki/Monad_%28functional_programming%29), [all major monad transformers](http://en.wikipedia.org/wiki/Monad_transformer), [a selection of comonads](http://en.wikipedia.org/wiki/Monad_(functional_programming)#Comonads) and [arrows](http://en.wikipedia.org/wiki/Arrow_%28computer_science%29).
+# singularity
+The goal of singularity is to provide reference implementations for [all major monads](http://en.wikipedia.org/wiki/Monad_%28functional_programming%29), [all major monad transformers](http://en.wikipedia.org/wiki/Monad_transformer), [a selection of comonads](http://en.wikipedia.org/wiki/Monad_(functional_programming)#Comonads) and [arrows](http://en.wikipedia.org/wiki/Arrow_%28computer_science%29).
 
 ## Monads
 
