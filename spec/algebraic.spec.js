@@ -27,8 +27,8 @@ describe("algebraic", function () {
         it("should allow method extension on top of type system", function () {
             var t = type
                 .implements("map", {
-                    Just: function (args, f) { return type.Just.from(f.apply(null, args)); },
-                    None: function () { return type.None.from(); }
+                    Just: function (val, f, t) { return t.Just.from(f(val)); },
+                    None: function (f, t) { return t.None.from(); }
                 }),
                 m = t.Just.from(5).map(function (x) { return x + 5; });
             expect(m.isJust).toBe(true);
@@ -38,7 +38,7 @@ describe("algebraic", function () {
         it("should throw an exception if an implementation doesn't exist", function () {
             var t = type
                 .implements("map", {
-                    None: function () { return type.None.from(); }
+                    None: function (f, t) { return t.None.from(); }
                 });
             expect(function () {
                 t.Just.from(5).map(function (x) { return x; });
@@ -52,6 +52,15 @@ describe("algebraic", function () {
 
             expect(f(type.Just.from(5))).toBe(5);
             expect(f(type.None.from())).toBeUndefined();
+        });
+
+        it("should allow 'static' helper methods on the parent type", function () {
+            var t = type
+                .static("from", function (v, t) {
+                    return v === undefined || v === null ? t.None.from() : t.Just.from(v);
+                });
+            expect(t.Maybe.from(5).isJust).toBe(true);
+            expect(t.Maybe.from(undefined).isNone).toBe(true);
         });
     });
 });

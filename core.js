@@ -62,6 +62,15 @@ module.exports = (function () {
         };
     }
 
+    function partialRight() {
+        var partArgs = toList(arguments),
+            f = first(partArgs),
+            parts = rest(partArgs);
+        return function () {
+            return f.apply(null, toList(arguments).concat(parts));
+        };
+    }
+
     function curryN(n, f) {
         return function () {
             var applied = toList(arguments);
@@ -131,6 +140,7 @@ module.exports = (function () {
     }
     return {
         partial: partial,
+        partialRight: partialRight,
         constant: function (x) { return function () { return x; }; },
         curry: curry,
         curryN: curry(curryN),

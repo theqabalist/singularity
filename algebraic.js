@@ -9,7 +9,9 @@ module.exports = (function (_) {
     }
     function data(typeName, subtypes) {
         var impls = {},
-            fromBuilder = function (subtypeName) {
+            stat = {},
+            t,
+            constructorFactory = function (subtypeName) {
                 /*jslint unparam: true*/
                 var args = _.rest(_.toList(arguments)),
                     s = _.reduce(function (inst, stSize, stName) {
@@ -18,7 +20,7 @@ module.exports = (function (_) {
                     }, _.reduce(function (base, implSpec, implName) {
                         var specMethod = implSpec[subtypeName],
                             implMethod = specMethod ?
-                                    _.partial(specMethod, args) :
+                                    _.partialRight(_.partial.apply(null, [specMethod].concat(args)), t) :
                                     _.partial(noSuchImplementation, subtypeName, implName);
                         base[implName] = implMethod;
                         return base;
@@ -54,26 +56,35 @@ module.exports = (function (_) {
                 return buildMethod();
             },
             buildConstructors = function () {
-                var cs = _.reduce(function (type, subtypeSize, subtypeName) {
-                    var builder = _.partial(fromBuilder, subtypeName);
+                var typeSpec = _.reduce(function (type, subtypeSize, subtypeName) {
+                    var builder = _.partial(constructorFactory, subtypeName);
                     type[subtypeName] = {
                         from: subtypeSize > 0 ? _.curryN(subtypeSize, builder) : builder
                     };
                     return type;
                 }, {}, subtypes);
 
-                cs.implements = function (key, spec) {
+                typeSpec.implements = function (key, spec) {
                     impls[key] = spec;
                     return buildConstructors();
                 };
 
-                cs[typeName] = {
-                    destructure: buildDestructure
+                typeSpec.static = function (key, impl) {
+                    stat[key] = _.partialRight(impl, t);
+                    return buildConstructors();
                 };
 
-                return cs;
-            },
-            t = buildConstructors();
+                typeSpec[typeName] = _.reduce(function (t, methodImpl, methodName) {
+                    t[methodName] = methodImpl;
+                    return t;
+                }, {
+                    destructure: buildDestructure
+                }, stat);
+
+                return typeSpec;
+            };
+
+        t = buildConstructors();
 
         return t;
     }
