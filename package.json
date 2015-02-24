@@ -17,7 +17,7 @@
     ],
     "repository": {
     	"type": "git",
-    	"url": "http://github.com/theqabalist/singularjs.git"
+    	"url": "http://github.com/theqabalist/singularity.git"
     },
     "devDependencies": {
         "jasmine-node": "^1.14.5"
