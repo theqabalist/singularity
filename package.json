@@ -7,9 +7,17 @@
     	"email": "me@brandonkeown.com"
     },
     "main": "index.js",
+    "files": [
+        "index.js",
+        "algebraic.js",
+        "core.js",
+        "either.js",
+        "interfaces.js",
+        "maybe.js"
+    ],
     "repository": {
     	"type": "git",
-    	"url": "http://github.com/theqabalist/singularjs"
+    	"url": "http://github.com/theqabalist/singularjs.git"
     },
     "devDependencies": {
         "jasmine-node": "^1.14.5"
