@@ -4,6 +4,7 @@
     expect: true,
     beforeEach: true
 */
+/*jslint unparam: true*/
 describe("algebraic", function () {
     "use strict";
     var data = require("../algebraic").data;
