@@ -43,4 +43,18 @@ describe("Either", function () {
             expect(f.ap(Right.from(5)).ap(Left.from(10)).isLeft).toBe(true);
         });
     });
+
+    describe("#flatMap", function () {
+        it("should apply the contained value to a function", function () {
+            var m = Right.from(5),
+                bound = m.flatMap(function (x) { return Right.from(x + 5); }),
+                bound2 = m.flatMap(function () { return Left.from("error message"); });
+            expect(bound.isRight).toBe(true);
+            expect(bound2.isLeft).toBe(true);
+            function typeChecked() {
+                return m.flatMap(function (x) { return x; });
+            }
+            expect(typeChecked).toThrow();
+        });
+    });
 });
