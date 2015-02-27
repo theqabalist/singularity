@@ -12,11 +12,19 @@ module.exports = (function (_) {
             stat = {},
             abstract = false,
             t,
+            typeKeywords = ["abstract", "implements", "static"],
+            conditionAbstract = function (t) {
+                var type = t[typeName],
+                    cluster = _.pick(typeKeywords, t);
+                cluster[typeName] = _.omit(["destructure"], type);
+
+                return abstract ? cluster : t;
+            },
             constructorFactory = function (subtypeName) {
                 /*jslint unparam: true*/
                 var args = _.rest(_.toList(arguments)),
                     s = _.reduce(function (inst, stSize, stName) {
-                        inst["is" + stName] = abstract ? undefined : stName === subtypeName;
+                        inst["is" + stName] = stName === subtypeName;
                         return inst;
                     }, _.reduce(function (base, implSpec, implName) {
                         var specMethod = implSpec[subtypeName],
@@ -63,28 +71,29 @@ module.exports = (function (_) {
                         from: subtypeSize > 0 ? _.curryN(subtypeSize, builder) : builder
                     };
                     return type;
-                }, {}, subtypes);
+                }, {}, subtypes),
+                    newType = _.compose(conditionAbstract, buildConstructors);
 
                 typeSpec.implements = function (key, spec) {
                     impls[key] = spec;
-                    return buildConstructors();
+                    return newType();
                 };
 
                 typeSpec.static = function (key, impl) {
                     stat[key] = _.partialRight(impl, t);
-                    return buildConstructors();
+                    return newType();
                 };
 
                 typeSpec.abstract = function () {
                     abstract = true;
-                    return buildConstructors();
+                    return newType();
                 };
 
                 typeSpec[typeName] = _.reduce(function (t, methodImpl, methodName) {
                     t[methodName] = methodImpl;
                     return t;
                 }, {
-                    destructure: abstract ? undefined : buildDestructure
+                    destructure: buildDestructure
                 }, stat);
 
                 return typeSpec;
@@ -92,7 +101,7 @@ module.exports = (function (_) {
 
         t = buildConstructors();
 
-        return abstract ? _.pick([typeName], t) : t;
+        return conditionAbstract(t);
     }
     return {
         data: data

@@ -95,3 +95,24 @@ var isJust = type.Maybe
 
 isJust(inst) === true;
 ```
+
+### Abstract Types
+Hiding type constructors can allow for more abstract code as all construction must be done through factories.  Abstract types cause 2 notable restrictions:
+
+* No access to type constructors (type.Just would be undefined but type.Maybe would be available)
+* No access to destructuring against constructor types, except inside builder context.
+
+```javascript
+var t = type.abstract();
+t.Just === undefined; // true
+t.Maybe.destructure === undefined; // true
+t = t.implements("contrive", {
+    Just: function (x, m, t) {
+        return t.Maybe.destructure()
+            .Just(function (v) { return x + v; })
+            .None(function () { return undefined; })(m); // this is allowed
+    },
+    None: function (m, t) {
+        return undefined;
+    }
+})```

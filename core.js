@@ -154,6 +154,39 @@ module.exports = (function () {
         }, {}, obj);
     }
 
+    function omit(fields, obj) {
+        return reduce(function (acc, item, key) {
+            if (!contains(key, fields)) {
+                acc[key] = item;
+            }
+            return acc;
+        }, {}, obj);
+    }
+
+    function compose2(f, g) {
+        return function () {
+            return f(g.apply(null, arguments));
+        };
+    }
+
+    function last(xs) {
+        return xs[xs.length - 1];
+    }
+
+    function initial(xs) {
+        return xs.slice(0, -1);
+    }
+
+    function compose() {
+        var fs = toList(arguments),
+            entry = last(fs),
+            chain = initial(fs).reverse();
+
+        return reduce(function (composed, f) {
+            return compose2(f, composed);
+        }, entry, chain);
+    }
+
     return {
         partial: partial,
         partialRight: partialRight,
@@ -171,6 +204,10 @@ module.exports = (function () {
         property: curry(property),
         reduce: curry(reduce),
         pick: curry(pick),
-        contains: curry(contains)
+        omit: curry(omit),
+        contains: curry(contains),
+        compose: compose,
+        last: last,
+        initial: initial
     };
 }());

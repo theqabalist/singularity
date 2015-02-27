@@ -129,4 +129,24 @@ describe("core", function () {
             expect(picker(obj)).toEqual({item1: "hello"});
         });
     });
+
+    describe("omit", function () {
+        it("should take a list of keys to reject and return a shallow copy without them", function () {
+            var obj = {
+                item1: "hello",
+                item2: "goodbye"
+            },
+                picker = core.omit(["item2"]);
+            expect(picker(obj)).toEqual({item1: "hello"});
+        });
+    });
+
+    describe("compose", function () {
+        it("should take n functions and pipe them together", function () {
+            function f(x) { return x + 5; }
+            function g(x) { return x + 10; }
+            var composed = core.compose(f, g);
+            expect(composed(0)).toBe(15);
+        });
+    });
 });

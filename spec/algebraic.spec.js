@@ -67,17 +67,38 @@ describe("algebraic", function () {
             expect(t.Maybe.from(undefined).isNone).toBe(true);
         });
 
-        it("should allow for abstract types", function () {
-            var t = type
-                .abstract()
-                .implements("map", {
-                    Just: function (x, f, t) { return t.Just.from(f(x)); },
-                    None: function (f, t) { return t.None.from(); }
+        describe("abstract", function () {
+            var t;
+            beforeEach(function () {
+                t = type
+                    .abstract()
+                    .implements("map", {
+                        Just: function (x, f, t) { return t.Just.from(f(x)); },
+                        None: function (f, t) { return t.None.from(); }
+                    });
+            });
+
+            it("should allow for abstract types", function () {
+
+                expect(t.Maybe.from(5).map(function (x) { return x * 2; }).isMaybe).toBe(true);
+                expect(t.Maybe.destructure).toBeUndefined();
+                expect(t.Just).toBeUndefined();
+            });
+
+            it("should allow for destructuring during implements", function () {
+                t = t.implements("mappend", {
+                    Just: function (x, m, t) {
+                        return t.Maybe.destructure()
+                            .Just(function (internal) { return t.Just.from(x + internal); })
+                            .None(function () { return t.Just.from(x); })(m);
+                    },
+                    None: function (v, t) {
+                        return t.None.from();
+                    }
                 });
-            expect(t.Maybe.from(5).map(function (x) { return x * 2; }).isMaybe).toBe(true);
-            expect(t.Maybe.from(5).isJust).toBeUndefined();
-            expect(t.Maybe.destructure).toBeUndefined();
-            expect(t.Just).toBeUndefined();
+                expect(t.Maybe.from(5).mappend(t.Maybe.from(10)).isMaybe).toBe(true);
+                expect(t.Maybe.destructure).toBeUndefined();
+            });
         });
     });
 });
