@@ -5,7 +5,7 @@ Italicized concepts are not yet implemented in any fashion.  This is because dur
 
 ## Monads
 
-* Maybe/Option
+* [Maybe/Option](docs/maybe.md)
 * <i>IO</i>
 * <i>State</i>
 * <i>Environment/Reader</i>
@@ -118,4 +118,13 @@ t = t.implements("contrive", {
         return undefined;
     }
 });
+
+## Installation
+
+Available from npm:
+
 ```
+npm install singularity
+```
+
+Or available in single compressed artifact from releases (good for web usage).
