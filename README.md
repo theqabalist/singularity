@@ -1,19 +1,21 @@
 # singularity
-The goal of singularity is to provide reference implementations for [all major monads](http://en.wikipedia.org/wiki/Monad_%28functional_programming%29), [all major monad transformers](http://en.wikipedia.org/wiki/Monad_transformer), [a selection of comonads](http://en.wikipedia.org/wiki/Monad_(functional_programming)#Comonads) and [arrows](http://en.wikipedia.org/wiki/Arrow_%28computer_science%29).
+The goal of singularity is to provide reference implementations for [all major monads](http://en.wikipedia.org/wiki/Monad_%28functional_programming%29), <i>[all major monad transformers](http://en.wikipedia.org/wiki/Monad_transformer)</i>, <i>[a selection of comonads](http://en.wikipedia.org/wiki/Monad_(functional_programming)#Comonads)</i> and <i>[arrows](http://en.wikipedia.org/wiki/Arrow_%28computer_science%29)</i>.
+
+Italicized concepts are not yet implemented in any fashion.  This is because during primary development of this library, this document functions as both a record and spec.
 
 ## Monads
 
 * Maybe/Option
-* IO
-* State
-* Environment/Reader
-* Writer
-* Continuation
+* <i>IO</i>
+* <i>State</i>
+* <i>Environment/Reader</i>
+* <i>Writer</i>
+* <i>Continuation</i>
 
 In addition to these documented, additional monads in the likeness and vain of Haskell are:
 
 * Either
-* Validation
+* <i>Validation</i>
 
 As all monads are applicatives, and all applicatives are functors, the following methods should be guaranteed on each type:
 
@@ -28,18 +30,18 @@ Additionally, on the type constructors are provided
 * from (available where sensible, acts as a semi-intelligent constructor or return function)
 * lift (lifts a function into a monadically aware function)
 
-## Monad Transformers
-* Option Transformer
-* Exception Transformer
-* Reader Transformer
-* State Transformer
-* Writer Transformer
-* Continuation Transformer
+## <i>Monad Transformers</i>
+* <i>Option Transformer</i>
+* <i>Exception Transformer</i>
+* <i>Reader Transformer</i>
+* <i>State Transformer</i>
+* <i>Writer Transformer</i>
+* <i>Continuation Transformer</i>
 
-## Comonads
-* Product
-* Function
-* Costate
+## <i>Comonads</i>
+* <i>Product</i>
+* <i>Function</i>
+* <i>Costate</i>
 
 ## Algebraic Data Type
 Because javascript has no syntactic concept of algebraic data types, like Haskell does, a generic
@@ -115,4 +117,5 @@ t = t.implements("contrive", {
     None: function (m, t) {
         return undefined;
     }
-})```
+});
+```
