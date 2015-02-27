@@ -118,4 +118,15 @@ describe("core", function () {
             expect(core.toList(d)).toEqual(d);
         });
     });
+
+    describe("pick", function () {
+        it("should take a list of keys to keep and return a shallow copy with them", function () {
+            var obj = {
+                item1: "hello",
+                item2: "goodbye"
+            },
+                picker = core.pick(["item1"]);
+            expect(picker(obj)).toEqual({item1: "hello"});
+        });
+    });
 });

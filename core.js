@@ -138,6 +138,22 @@ module.exports = (function () {
 
         return buildMethod();
     }
+
+    function contains(needle, haystack) {
+        return reduce(function (acc, item) {
+            return acc || needle === item;
+        }, false, haystack);
+    }
+
+    function pick(fields, obj) {
+        return reduce(function (acc, item, key) {
+            if (contains(key, fields)) {
+                acc[key] = item;
+            }
+            return acc;
+        }, {}, obj);
+    }
+
     return {
         partial: partial,
         partialRight: partialRight,
@@ -153,6 +169,8 @@ module.exports = (function () {
         keys: keys,
         id: id,
         property: curry(property),
-        reduce: curry(reduce)
+        reduce: curry(reduce),
+        pick: curry(pick),
+        contains: curry(contains)
     };
 }());

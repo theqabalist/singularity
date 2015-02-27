@@ -15,7 +15,10 @@ describe("algebraic", function () {
             type = data("Maybe", {
                 Just: 1,
                 None: 0
-            });
+            })
+                .static("from", function (v, t) {
+                    return v === undefined || v === null ? t.None.from(v) : t.Just.from(v);
+                });
         });
 
         it("should take a type name and disjoint subtype specs", function () {
@@ -62,6 +65,19 @@ describe("algebraic", function () {
                 });
             expect(t.Maybe.from(5).isJust).toBe(true);
             expect(t.Maybe.from(undefined).isNone).toBe(true);
+        });
+
+        it("should allow for abstract types", function () {
+            var t = type
+                .abstract()
+                .implements("map", {
+                    Just: function (x, f, t) { return t.Just.from(f(x)); },
+                    None: function (f, t) { return t.None.from(); }
+                });
+            expect(t.Maybe.from(5).map(function (x) { return x * 2; }).isMaybe).toBe(true);
+            expect(t.Maybe.from(5).isJust).toBeUndefined();
+            expect(t.Maybe.destructure).toBeUndefined();
+            expect(t.Just).toBeUndefined();
         });
     });
 });

@@ -10,12 +10,13 @@ module.exports = (function (_) {
     function data(typeName, subtypes) {
         var impls = {},
             stat = {},
+            abstract = false,
             t,
             constructorFactory = function (subtypeName) {
                 /*jslint unparam: true*/
                 var args = _.rest(_.toList(arguments)),
                     s = _.reduce(function (inst, stSize, stName) {
-                        inst["is" + stName] = stName === subtypeName;
+                        inst["is" + stName] = abstract ? undefined : stName === subtypeName;
                         return inst;
                     }, _.reduce(function (base, implSpec, implName) {
                         var specMethod = implSpec[subtypeName],
@@ -56,7 +57,7 @@ module.exports = (function (_) {
                 return buildMethod();
             },
             buildConstructors = function () {
-                var typeSpec = _.reduce(function (type, subtypeSize, subtypeName) {
+                var typeSpec = abstract ? {} : _.reduce(function (type, subtypeSize, subtypeName) {
                     var builder = _.partial(constructorFactory, subtypeName);
                     type[subtypeName] = {
                         from: subtypeSize > 0 ? _.curryN(subtypeSize, builder) : builder
@@ -74,11 +75,16 @@ module.exports = (function (_) {
                     return buildConstructors();
                 };
 
+                typeSpec.abstract = function () {
+                    abstract = true;
+                    return buildConstructors();
+                };
+
                 typeSpec[typeName] = _.reduce(function (t, methodImpl, methodName) {
                     t[methodName] = methodImpl;
                     return t;
                 }, {
-                    destructure: buildDestructure
+                    destructure: abstract ? undefined : buildDestructure
                 }, stat);
 
                 return typeSpec;
@@ -86,7 +92,7 @@ module.exports = (function (_) {
 
         t = buildConstructors();
 
-        return t;
+        return abstract ? _.pick([typeName], t) : t;
     }
     return {
         data: data
