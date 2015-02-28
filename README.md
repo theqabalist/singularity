@@ -5,7 +5,7 @@ The goal of singularity is to provide reference implementations for [all major m
 
 Italicized concepts are not yet implemented in any fashion.  This is because during primary development of this library, this document functions as both a record and spec.
 
-[![Build Status](https://travis-ci.org/theqabalist/singularity.svg?branch=master)](https://travis-ci.org/theqabalist/singularity)
+[![Build Status](https://travis-ci.org/theqabalist/singularity.svg?branch=master)](https://travis-ci.org/theqabalist/singularity) [![Circle CI](https://circleci.com/gh/theqabalist/singularity.svg?style=svg)](https://circleci.com/gh/theqabalist/singularity)
 
 
 ## Monads
