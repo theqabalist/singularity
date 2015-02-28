@@ -9,7 +9,7 @@ module.exports = (function (_) {
                     var args = _.toList(arguments),
                         which = args[param],
                         prop = which[name];
-                    return prop ? typeof prop === 'function' : false;
+                    return prop ? typeof prop === "function" : false;
                 };
             }
         };

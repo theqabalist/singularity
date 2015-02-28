@@ -21,7 +21,7 @@ module.exports = (function () {
         return acc;
     }
 
-    function isObject(x) { return typeof x === 'object'; }
+    function isObject(x) { return typeof x === "object"; }
     function isArray(x) {
         return isObject(x) && x instanceof Array;
     }
@@ -92,7 +92,7 @@ module.exports = (function () {
     }
 
     function isFunction(x) {
-        return typeof x === 'function';
+        return typeof x === "function";
     }
 
     function multi(curryOrder) {

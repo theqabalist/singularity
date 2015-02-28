@@ -59,8 +59,8 @@ describe("core", function () {
         });
     });
 
-    function isString(x) { return typeof x === 'string'; }
-    function isNumber(x) { return typeof x === 'number'; }
+    function isString(x) { return typeof x === "string"; }
+    function isNumber(x) { return typeof x === "number"; }
 
     describe("multi", function () {
         it("should provide a multidispatch builder.", function () {
