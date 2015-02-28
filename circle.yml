@@ -1,0 +1,9 @@
+machine:
+    node:
+        version: 0.11.13
+dependencies:
+    override:
+        - npm install --dev
+test:
+    post:
+        - node_modules/.bin/jasmine-node spec
