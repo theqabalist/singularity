@@ -1,6 +1,6 @@
 # Maybe/Option Monad
 
-Represents a value which may or may not exist.
+Represents a value which may or may not exist.  Semantically, operations continue on a Just, and do not execute on a None.
 
 ## Construction
 This type has two public constructors which are ```Just``` and ```None``` which take 1 argument and 0 arguments respectively.
