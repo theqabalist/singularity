@@ -149,4 +149,10 @@ describe("core", function () {
             expect(composed(0)).toBe(15);
         });
     });
+
+    describe("merge", function () {
+        it("should take an object and copy all the values from another onto it", function () {
+            expect(core.merge({a: "a"}, {b: "b"})).toEqual({a: "a", b: "b"});
+        });
+    });
 });

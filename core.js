@@ -187,6 +187,13 @@ module.exports = (function () {
         }, entry, chain);
     }
 
+    function merge(a, b) {
+        return reduce(function (obj, val, key) {
+            obj[key] = val;
+            return obj;
+        }, a, b);
+    }
+
     return {
         partial: partial,
         partialRight: partialRight,
@@ -208,6 +215,7 @@ module.exports = (function () {
         contains: curry(contains),
         compose: compose,
         last: last,
-        initial: initial
+        initial: initial,
+        merge: merge
     };
 }());

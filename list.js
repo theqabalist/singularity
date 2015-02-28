@@ -61,20 +61,10 @@ module.exports = (function (adt) {
         })
         .implements("foldLeft", {
             Cons: function(x, xs, z, f, t) {
-                return xs.foldLeft(f(x, z), f); 
+                return xs.foldLeft(f(x, z), f);
             },
             Nil: function(z, f, t) {
                 return z;
-            }
-        })
-        .implements("flatMap", {
-            Cons: function(x, xs, f, t) {
-                console.log(t.List);
-                var nil = t.Nil.from();
-                return t.Cons.from(f(x), xs.flatMap(f)).foldRight(nil, t.List.mplus);
-            },
-            Nil: function(f, t) {
-                return t.Nil.from();
             }
         })
         .static("mreturn", mreturn)
@@ -106,6 +96,16 @@ module.exports = (function (adt) {
                 arr[i] = val(cell);
             }
             return arr;
+        })
+        .implements("flatMap", {
+            Cons: function(x, xs, f, t) {
+                console.log(t.List);
+                var nil = t.Nil.from();
+                return t.Cons.from(f(x), xs.flatMap(f)).foldRight(nil, t.List.mplus);
+            },
+            Nil: function(f, t) {
+                return t.Nil.from();
+            }
         });
 }(
     require("./algebraic")

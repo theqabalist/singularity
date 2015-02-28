@@ -1,3 +1,4 @@
+var util = require("util");
 module.exports = (function (_) {
     "use strict";
     function noSuchImplementation(type, method) {
@@ -11,7 +12,7 @@ module.exports = (function (_) {
         var impls = {},
             stat = {},
             abstract = false,
-            t,
+            t = {},
             typeKeywords = ["abstract", "implements", "static"],
             conditionAbstract = function (t) {
                 var type = t[typeName],
@@ -20,7 +21,7 @@ module.exports = (function (_) {
 
                 return abstract ? cluster : t;
             },
-            constructorFactory = function (subtypeName) {
+            constructor = function (subtypeName) {
                 /*jslint unparam: true*/
                 var args = _.rest(_.toList(arguments)),
                     s = _.reduce(function (inst, stSize, stName) {
@@ -65,36 +66,38 @@ module.exports = (function (_) {
                 return buildMethod();
             },
             buildConstructors = function () {
-                var typeSpec = abstract ? {} : _.reduce(function (type, subtypeSize, subtypeName) {
-                    var builder = _.partial(constructorFactory, subtypeName);
+                var typeSpec = _.reduce(function (type, subtypeSize, subtypeName) {
+                    var builder = _.partial(constructor, subtypeName);
                     type[subtypeName] = {
                         from: subtypeSize > 0 ? _.curryN(subtypeSize, builder) : builder
                     };
                     return type;
-                }, {}, subtypes),
-                    newType = _.compose(conditionAbstract, buildConstructors);
+                }, {}, subtypes);
+
+                typeSpec[typeName] = _.reduce(function (t2, methodImpl, methodName) {
+                    t2[methodName] = methodImpl;
+                    return t2;
+                }, {
+                    destructure: buildDestructure
+                }, stat);
 
                 typeSpec.implements = function (key, spec) {
                     impls[key] = spec;
-                    return newType();
+                    t = buildConstructors();
+                    return conditionAbstract(t);
                 };
 
                 typeSpec.static = function (key, impl) {
-                    stat[key] = _.partialRight(impl, t);
-                    return newType();
+                    stat[key] = _.partialRight(impl, typeSpec);
+                    t = buildConstructors();
+                    return conditionAbstract(t);
                 };
 
                 typeSpec.abstract = function () {
                     abstract = true;
-                    return newType();
+                    t = buildConstructors();
+                    return conditionAbstract(t);
                 };
-
-                typeSpec[typeName] = _.reduce(function (t, methodImpl, methodName) {
-                    t[methodName] = methodImpl;
-                    return t;
-                }, {
-                    destructure: buildDestructure
-                }, stat);
 
                 return typeSpec;
             };

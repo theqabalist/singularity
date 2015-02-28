@@ -5,6 +5,7 @@
     beforeEach: true
 */
 /*jslint unparam: true*/
+var util = require("util");
 describe("algebraic", function () {
     "use strict";
     var data = require("../algebraic").data;
@@ -67,19 +68,31 @@ describe("algebraic", function () {
             expect(t.Maybe.from(undefined).isNone).toBe(true);
         });
 
+        it("should be able to call static methods from implements context", function () {
+            var t = type
+                .static("from", function (v, t2) {
+                    return v === undefined || v === null ? t2.None.from() : t2.Just.from(v);
+                })
+                .implements("bogus", {
+                    Just: function (x, t2) { return t2.Maybe.from(x); },
+                    None: function (t2) { return t2.Maybe.from(null); }
+                });
+            expect(t.Maybe.from(5).bogus().isJust).toBe(true);
+            expect(t.Maybe.from(null).bogus().isNone).toBe(true);
+        });
+
         describe("abstract", function () {
             var t;
             beforeEach(function () {
                 t = type
                     .abstract()
                     .implements("map", {
-                        Just: function (x, f, t) { return t.Just.from(f(x)); },
-                        None: function (f, t) { return t.None.from(); }
+                        Just: function (x, f, t2) { return t2.Just.from(f(x)); },
+                        None: function (f, t2) { return t2.None.from(); }
                     });
             });
 
             it("should allow for abstract types", function () {
-
                 expect(t.Maybe.from(5).map(function (x) { return x * 2; }).isMaybe).toBe(true);
                 expect(t.Maybe.destructure).toBeUndefined();
                 expect(t.Just).toBeUndefined();

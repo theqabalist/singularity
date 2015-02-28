@@ -1,3 +1,8 @@
+/*global
+    describe: true,
+    it: true,
+    expect: true
+*/
 describe("list", function() {
     "use strict";
     var List = require("../list");
