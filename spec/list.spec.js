@@ -17,6 +17,9 @@ describe("list", function() {
             it("should return the tail of a non empty list", function () {
                 expect(ListType.toArray(ListType.fromArray([1, 2]).tail())).toEqual([2]);
             });
+            it("should return an accurate count", function () {
+                expect(ListType.fromArray([1, 2, 3]).count()).toEqual(3);
+            })
         });
         describe("Functor", function() {
             it("should implement map", function () {
@@ -27,6 +30,19 @@ describe("list", function() {
         describe("Applicative", function() {
             it("should apply", function () {
 
+            });
+        });
+        describe("Monad", function() {
+
+            it("should flatMap", function () {
+                function unproject(x) { return ListType.fromArray([x, x]); }
+                expect(ListType.toArray(ListType.fromArray([1, 2, 3]).flatMap(unproject))).toEqual([1, 1, 2, 2, 3, 3]);
+            });
+            it("should return", function() {
+                expect(ListType.toArray(ListType.mreturn(1))).toEqual([1]);
+            });
+            it("should be constrained under the monad laws", function() {
+                // TODO
             });
         });
         describe("Foldable", function() {

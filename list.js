@@ -1,6 +1,9 @@
 /*jslint unparam: true*/
 module.exports = (function (adt) {
     "use strict";
+    function mreturn(x, t) {
+        return t.Cons.from(x, t.Nil.from());
+    }
     return adt
         .data("List", {Cons: 1, Nil: 0})
         .implements("map", {
@@ -39,6 +42,15 @@ module.exports = (function (adt) {
                 return t.Nil.from();
             }
         })
+        // Is it worth implementing as a non-primitive combinator instead?
+        .implements("count", {
+            Cons: function(x, xs, t) {
+                return 1 + xs.count();
+            },
+            Nil: function(t) {
+                return 0;
+            }
+        })
         .implements("foldRight", {
             Cons: function(x, xs, z, f, t) {
                 return f(x, xs.foldRight(z, f));
@@ -55,6 +67,18 @@ module.exports = (function (adt) {
                 return z;
             }
         })
+        .implements("flatMap", {
+            Cons: function(x, xs, f, t) {
+                console.log(t.List);
+                var nil = t.Nil.from();
+                return t.Cons.from(f(x), xs.flatMap(f)).foldRight(nil, t.List.mplus);
+            },
+            Nil: function(f, t) {
+                return t.Nil.from();
+            }
+        })
+        .static("mreturn", mreturn)
+        .static("pure", mreturn)
         .static("mzero", function(t) {
             return t.Nil.from();
         })
