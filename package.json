@@ -19,6 +19,9 @@
     "type": "git",
     "url": "http://github.com/theqabalist/singularity.git"
   },
+  "scripts": {
+    "test": "node_modules/.bin/gulp style && node_modules/.bin/jasmine-node spec"
+  },
   "devDependencies": {
     "browserify": "^9.0.3",
     "gulp": "^3.8.11",
