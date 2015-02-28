@@ -1,4 +1,4 @@
-# singularity
+# singularity <img src="docs/logo.png" height="64" />
 The goal of singularity is to provide reference implementations for [all major monads](http://en.wikipedia.org/wiki/Monad_%28functional_programming%29), <i>[all major monad transformers](http://en.wikipedia.org/wiki/Monad_transformer)</i>, <i>[a selection of comonads](http://en.wikipedia.org/wiki/Monad_(functional_programming)#Comonads)</i> and <i>[arrows](http://en.wikipedia.org/wiki/Arrow_%28computer_science%29)</i>.
 
 Italicized concepts are not yet implemented in any fashion.  This is because during primary development of this library, this document functions as both a record and spec.
