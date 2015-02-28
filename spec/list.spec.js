@@ -10,6 +10,14 @@ describe("list", function() {
                 expect(ListType.toArray(ListType.fromArray([1, 2]))).toEqual([1, 2]);
             });
         });
+        describe("manipulation", function() {
+            it("should return the head of a non empty list", function () {
+                expect(ListType.fromArray([1, 2]).head()).toEqual(1);
+            });
+            it("should return the tail of a non empty list", function () {
+                expect(ListType.toArray(ListType.fromArray([1, 2]).tail())).toEqual([2]);
+            });
+        });
         describe("Functor", function() {
             it("should implement map", function () {
                 function inc(x) { return x + 1; }
@@ -32,9 +40,13 @@ describe("list", function() {
             });
         });
         describe("Monoid", function() {
+            it("should produce empty list for zero", function () {
+                expect(ListType.mzero().isNil).toEqual(true);
+            });
             it("should append", function() {
-
-            })
-        })
+                expect(ListType.toArray(ListType.mplus(ListType.fromArray([1, 2]), ListType.fromArray([3, 4]))))
+                    .toEqual([1, 2, 3, 4]);
+            });
+        });
     });
 });

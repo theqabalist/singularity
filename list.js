@@ -11,6 +11,34 @@ module.exports = (function (adt) {
                 return t.Nil.from();
             }
         })
+        .implements("head", {
+            Cons: function(x, xs, t) {
+                return x;
+            },
+            Nil: function(t) {
+                throw new Error("Nil has no head");
+            }
+        })
+        .implements("tail", {
+            Cons: function(x, xs, t) {
+                return xs;
+            },
+            Nil: function(t) {
+                throw new Error("Nil has no tail");
+            }
+        })
+        .implements("drop", {
+            Cons: function(x, xs, n, t) {
+                if (n <= 0) {
+                    return t.Cons.from(x, xs);
+                } else {
+                    return xs.drop(n - 1);
+                }
+            },
+            Nil: function(n, t) {
+                return t.Nil.from();
+            }
+        })
         .implements("foldRight", {
             Cons: function(x, xs, z, f, t) {
                 return f(x, xs.foldRight(z, f));
@@ -26,6 +54,12 @@ module.exports = (function (adt) {
             Nil: function(z, f, t) {
                 return z;
             }
+        })
+        .static("mzero", function(t) {
+            return t.Nil.from();
+        })
+        .static("mplus", function(l, r, t) {
+            return l.foldRight(r, t.Cons.from);
         })
         .static("fromArray", function(arr, t) {
             var list = t.Nil.from();
