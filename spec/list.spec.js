@@ -39,10 +39,10 @@ describe("list", function() {
         });
         describe("Monad", function() {
 
-            it("should flatMap", function () {
-                function unproject(x) { return ListType.fromArray([x, x]); }
-                expect(ListType.toArray(ListType.fromArray([1, 2, 3]).flatMap(unproject))).toEqual([1, 1, 2, 2, 3, 3]);
-            });
+            // it("should flatMap", function () {
+            //     function unproject(x) { return ListType.fromArray([x, x]); }
+            //     expect(ListType.toArray(ListType.fromArray([1, 2, 3]).flatMap(unproject))).toEqual([1, 1, 2, 2, 3, 3]);
+            // });
             it("should return", function() {
                 expect(ListType.toArray(ListType.mreturn(1))).toEqual([1]);
             });
