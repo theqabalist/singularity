@@ -118,6 +118,7 @@ t = t.implements("contrive", {
         return undefined;
     }
 });
+```
 
 ## Installation
 
