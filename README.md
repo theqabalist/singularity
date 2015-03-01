@@ -11,16 +11,17 @@ Italicized concepts are not yet implemented in any fashion.  This is because dur
 ## Monads
 
 * [Maybe/Option](docs/maybe.md)
-* <i>IO</i>
+* [IO](docs/io.md)
 * <i>State</i>
 * <i>Environment/Reader</i>
 * <i>Writer</i>
 * <i>Continuation</i>
 
-In addition to these documented, additional monads in the likeness and vain of Haskell are:
+In addition to these documented in wikipedia, additional monads provided are:
 
 * [Either](docs/either.md)
 * <i>Validation</i>
+* <i>Future (effectful)</i>
 
 As all monads are applicatives, and all applicatives are functors, the following methods should be guaranteed on each type:
 

@@ -19,8 +19,10 @@ module.exports = (function (adt, either, iface, maybe, io) {
         join: iface.join
     };
 
-    if (window) {
+    try {
         window.S = obj;
+    } catch (ignore) {
+
     }
 
     return obj;
