@@ -83,21 +83,18 @@ module.exports = (function (adt) {
             var val = t.List.destructure()
                     .Cons(function (h, _) { return h; })
                     .Nil(function () { return null; }),
-                tail = t.List.destructure()
-                    .Cons(function (_, t) { return t; })
-                    .Nil(function () { return null; }),
                 arr = [],
                 i = 0,
                 cell = list;
-            for (i, cell; cell.isCons; i += 1, cell = tail(cell)) {
+            for (i, cell; cell.isCons; i += 1, cell = cell.tail()) {
                 arr[i] = val(cell);
             }
             return arr;
         })
         .implements("flatMap", {
             Cons: function (x, xs, f, t) {
-                var nil = t.Nil.from();
-                return t.Cons.from(f(x), xs.flatMap(f)).foldRight(nil, t.List.mplus);
+                return t.Cons.from(x, xs).map(f)
+                    .foldRight(t.List.mzero(), t.List.mplus);
             },
             Nil: function (f, t) {
                 return t.Nil.from();
