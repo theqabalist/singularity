@@ -29,4 +29,5 @@ node_modules
 
 *.sublime-workspace
 dist
+packages
 *.tar.bz2

@@ -1,4 +1,5 @@
 #!/bin/bash
 gulp
-tar -cjf singularity.`jshon -F package.json -e version -u`.tar.bz2 dist/*
+mkdir packages
+tar -cjf packages/singularity.`jshon -F package.json -e version -u`-`git rev-parse --short HEAD`.tar.bz2 dist/*
 rm -rf dist
