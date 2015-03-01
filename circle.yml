@@ -7,3 +7,4 @@ test:
     post:
         - node_modules/.bin/gulp style
         - node_modules/.bin/jasmine-node spec
+        - package
