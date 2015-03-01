@@ -96,7 +96,6 @@ module.exports = (function (adt) {
         })
         .implements("flatMap", {
             Cons: function (x, xs, f, t) {
-                console.log(t.List);
                 var nil = t.Nil.from();
                 return t.Cons.from(f(x), xs.flatMap(f)).foldRight(nil, t.List.mplus);
             },
@@ -104,6 +103,7 @@ module.exports = (function (adt) {
                 return t.Nil.from();
             }
         });
+        
 }(
     require("./algebraic")
 ));

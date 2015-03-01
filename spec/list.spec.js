@@ -39,16 +39,16 @@ describe("list", function () {
         // });
         describe("Monad", function () {
 
-            // it("should flatMap", function () {
-            //     function unproject(x) { return ListType.fromArray([x, x]); }
-            //   expect(ListType.toArray(ListType.fromArray([1, 2, 3]).flatMap(unproject))).toEqual([1, 1, 2, 2, 3, 3]);
-            // });
+            it("should flatMap", function () {
+               function unproject(x) { return ListType.fromArray([x, x]); }
+               expect(ListType.toArray(ListType.fromArray([1, 2, 3]).flatMap(unproject))).toEqual([1, 1, 2, 2, 3, 3]);
+            });
             it("should return", function () {
                 expect(ListType.toArray(ListType.mreturn(1))).toEqual([1]);
             });
-            // it("should be constrained under the monad laws", function() {
+            //it("should be constrained under the monad laws", function() {
             //
-            // });
+            //});
         });
         describe("Foldable", function () {
             function add(x, y) { return x + y; }
@@ -67,6 +67,10 @@ describe("list", function () {
             it("should append", function () {
                 expect(ListType.toArray(ListType.mplus(ListType.fromArray([1, 2]), ListType.fromArray([3, 4]))))
                     .toEqual([1, 2, 3, 4]);
+            });
+            it("should append with empty", function () {
+                expect(ListType.toArray(ListType.mplus(ListType.fromArray([1, 2]), ListType.mzero()))).toEqual([1, 2]);
+                expect(ListType.toArray(ListType.mplus(ListType.mzero(), ListType.fromArray([1, 2])))).toEqual([1, 2]);
             });
         });
     });
