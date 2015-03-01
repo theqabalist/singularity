@@ -1,6 +1,6 @@
 {
   "name": "singularity",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "license": "MIT",
   "author": {
     "name": "Brandon Keown",
@@ -13,7 +13,9 @@
     "core.js",
     "either.js",
     "interfaces.js",
-    "maybe.js"
+    "maybe.js",
+    "io.js",
+    "reader.js"
   ],
   "repository": {
     "type": "git",
@@ -25,6 +27,7 @@
   "devDependencies": {
     "browserify": "^9.0.3",
     "gulp": "^3.8.11",
+    "gulp-jasmine": "^2.0.0",
     "gulp-jscs": "^1.4.0",
     "gulp-jshint": "^1.9.2",
     "gulp-jslint": "^0.2.2",

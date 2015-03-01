@@ -1,7 +1,7 @@
 /*global
     window: true
 */
-module.exports = (function (adt, either, iface, maybe, io) {
+module.exports = (function (adt, either, iface, maybe, io, reader) {
     "use strict";
     var obj = {
         adt: adt,
@@ -12,7 +12,8 @@ module.exports = (function (adt, either, iface, maybe, io) {
             Either: either.Either,
             Right: either.Right,
             Left: either.Left,
-            IO: io.IO
+            IO: io.IO,
+            Reader: reader.Reader
         },
         fmap: iface.fmap,
         destructure: iface.destructure,
@@ -31,5 +32,6 @@ module.exports = (function (adt, either, iface, maybe, io) {
     require("./either"),
     require("./interfaces"),
     require("./maybe"),
-    require("./io")
+    require("./io"),
+    require("./reader")
 ));

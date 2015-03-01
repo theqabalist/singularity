@@ -13,7 +13,7 @@ Italicized concepts are not yet implemented in any fashion.  This is because dur
 * [Maybe/Option](docs/maybe.md)
 * [IO](docs/io.md)
 * <i>State</i>
-* <i>Environment/Reader</i>
+* [Environment/Reader](docs/reader.md)
 * <i>Writer</i>
 * <i>Continuation</i>
 
@@ -23,14 +23,17 @@ In addition to these documented in wikipedia, additional monads provided are:
 * <i>Validation</i>
 * <i>Future (effectful)</i>
 
-As all monads are applicatives, and all applicatives are functors, the following methods should be guaranteed on each type:
+As all monads are applicatives, and all applicatives are functors, the following methods should be guaranteed on each instance:
 
 * map (functor map)
 * ap (applicative apply)
 * flatMap (monadic bind)
+
+On the type constructors are provided
+
 * from (constructor method)
 
-Additionally, on the type constructors are provided
+On the types proper are provided
 
 * destructure (provides basic type pattern matched dispatch)
 * from (available where sensible, acts as a semi-intelligent constructor or return function)
@@ -54,13 +57,13 @@ Because javascript has no syntactic concept of algebraic data types, like Haskel
 type declaration facility was created in order to enable working with types of this nature.
 
 ### Declaration
-In the algebraic module, there is a function ```data``` that has the signature ```data(abstractName, concreteSpec)```
-In the concreteSpec is provided names for the subtypes and the number of contained data fields.
+In the algebraic module, there is a function ```data``` that has the signature ```data(name, constructors)```
+In the concreteSpec is provided names for the type constructors and the number of contained data fields.
 So
 ```javascript
 type = adt.data("Maybe", {Just: 1, None: 0});
 ```
-Declares a type called ```Maybe``` with two subtypes, ```Just``` and ```None```, which wrap 1 and 0
+Declares a type called ```Maybe``` with two constructors, ```Just``` and ```None```, which wrap 1 and 0
 peices of data respectively.
 
 ### Implements
@@ -81,7 +84,7 @@ Which is to say that any and all wrapped data in the type is exposed first, foll
 followed finally by a type context so that access to the type and subtypes related to the implementing type are available.
 
 ### Static
-For any methods that may make sense to have, but not make sense on a subtype basis, a "static" method provider exists.
+For any methods that may make sense to have, but not make sense on a instance, a "static" method provider exists.
 ```javascript
 type.static("lift", function (f, t) {
     return t.Just(curry(f));
