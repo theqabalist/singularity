@@ -47,6 +47,14 @@ module.exports = (function (adt) {
                 return 0;
             }
         })
+        .implements("ap", {
+            Cons: function (f, fs, vs, t) {
+                return t.List.mplus(vs.map(f), fs.ap(vs));
+            },
+            Nil: function (vs, t) {
+                return t.Nil.from();
+            }
+        })
         .implements("foldRight", {
             Cons: function (x, xs, z, f, t) {
                 return f(x, xs.foldRight(z, f));
@@ -100,7 +108,6 @@ module.exports = (function (adt) {
                 return t.Nil.from();
             }
         });
-        
 }(
     require("./algebraic")
 ));

@@ -32,23 +32,33 @@ describe("list", function () {
                 expect(ListType.toArray(ListType.fromArray([1, 2, 3]).map(inc))).toEqual([2, 3, 4]);
             });
         });
-        // describe("Applicative", function () {
-        //     it("should apply", function () {
-
-        //     });
-        // });
-        describe("Monad", function () {
-
-            it("should flatMap", function () {
-               function unproject(x) { return ListType.fromArray([x, x]); }
-               expect(ListType.toArray(ListType.fromArray([1, 2, 3]).flatMap(unproject))).toEqual([1, 1, 2, 2, 3, 3]);
+        describe("Applicative", function () {
+            function add(x) {
+                return function (y) {
+                    return x + y;
+                };
+            }
+            it("should apply", function () {
+                expect(ListType.toArray(ListType.fromArray([add]).ap(ListType.fromArray([1, 2])).ap(ListType.fromArray([3, 4]))))
+                    .toEqual([4, 5, 5, 6]);
             });
+        });
+        describe("Monad", function () {
+            function unproject(x) {
+                return ListType.fromArray([x, x]);
+            }
+            it("should flatMap", function () {
+                expect(ListType.toArray(ListType.fromArray([1, 2, 3]).flatMap(unproject)))
+                    .toEqual([1, 1, 2, 2, 3, 3]);
+            });
+
             it("should return", function () {
                 expect(ListType.toArray(ListType.mreturn(1))).toEqual([1]);
             });
-            //it("should be constrained under the monad laws", function() {
+
+            // it("should be constrained under the monad laws", function() {
             //
-            //});
+            // });
         });
         describe("Foldable", function () {
             function add(x, y) { return x + y; }
