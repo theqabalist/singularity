@@ -1,7 +1,7 @@
 /*global
     window: true
 */
-module.exports = (function (adt, either, iface, maybe) {
+module.exports = (function (adt, either, iface, maybe, io) {
     "use strict";
     var obj = {
         adt: adt,
@@ -11,7 +11,8 @@ module.exports = (function (adt, either, iface, maybe) {
             None: maybe.None,
             Either: either.Either,
             Right: either.Right,
-            Left: either.Left
+            Left: either.Left,
+            IO: io.IO
         },
         fmap: iface.fmap,
         destructure: iface.destructure,
@@ -27,5 +28,6 @@ module.exports = (function (adt, either, iface, maybe) {
     require("./algebraic"),
     require("./either"),
     require("./interfaces"),
-    require("./maybe")
+    require("./maybe"),
+    require("./io")
 ));
