@@ -39,7 +39,10 @@ describe("list", function () {
                 };
             }
             it("should apply", function () {
-                expect(ListType.toArray(ListType.fromArray([add]).ap(ListType.fromArray([1, 2])).ap(ListType.fromArray([3, 4]))))
+                expect(ListType
+                    .toArray(ListType.fromArray([add])
+                        .ap(ListType.fromArray([1, 2]))
+                        .ap(ListType.fromArray([3, 4]))))
                     .toEqual([4, 5, 5, 6]);
             });
         });
