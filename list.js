@@ -99,6 +99,14 @@ module.exports = (function (adt) {
             }
             return arr;
         })
+        .implements("toArray", {
+            Cons: function (x, xs, t) {
+                return t.List.toArray(t.Cons.from(x, xs));
+            },
+            Nil: function (t) {
+                return [];
+            }
+        })
         .implements("flatMap", {
             Cons: function (x, xs, f, t) {
                 return t.Cons.from(x, xs).map(f)
