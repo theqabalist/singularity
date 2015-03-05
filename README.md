@@ -22,6 +22,8 @@ In addition to these documented in wikipedia, additional monads provided are:
 * [Either](docs/either.md)
 * <i>Validation</i>
 * <i>Future (effectful)</i>
+* Arr (Array)
+* <i>List (Linked List)</i>
 
 As all monads are applicatives, and all applicatives are functors, the following methods should be guaranteed on each instance:
 
