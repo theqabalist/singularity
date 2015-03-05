@@ -25,7 +25,7 @@ var aWriter = Writer.typed(Arr),
     w = aWriter.lift(function (a, b) { return a + b; }),
     m1 = aWriter.from(0).flatMap(add5),
     m2 = aWriter.from(2).flatMap(mult5);
-expect(w.ap(m1).ap(m2).val(getLog)).toEqual(["added 5", "mult by 5"]);
+expect(w.ap(m1).ap(m2).output().toJs()).toEqual(["added 5", "mult by 5"]);
 ```
 
 Here you can see use of the ```typed``` factory which relieves you from having to do this otherwise:
@@ -41,7 +41,7 @@ function mult5(v) {
 var w = Writer.lift(Arr.mzero(), function (a, b) { return a + b; }),
     m1 = Writer.from(Arr.mzero(), 0).flatMap(add5),
     m2 = Writer.from(Arr.mzero(), 2).flatMap(mult5);
-expect(w.ap(m1).ap(m2).val(getLog)).toEqual(["added 5", "mult by 5"]);
+expect(w.ap(m1).ap(m2).output().toJs()).toEqual(["added 5", "mult by 5"]);
 ```
 
 It's not a huge gain, but it makes the code a little bit more readable without the extra noise of the mzero call.
