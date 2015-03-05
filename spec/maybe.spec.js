@@ -5,10 +5,10 @@
 */
 describe("Maybe", function () {
     "use strict";
-    var Maybe = require("../maybe").Maybe,
-        Just = require("../maybe").Just,
-        None = require("../maybe").None,
-        _ = require("../interfaces");
+    var Maybe = require("../lib/maybe").Maybe,
+        Just = require("../lib/maybe").Just,
+        None = require("../lib/maybe").None,
+        _ = require("../lib/interfaces");
     describe(".from", function () {
         it("should take a javascript value and produce a correct Maybe", function () {
             expect(Maybe.from(undefined).isNone).toBe(true);

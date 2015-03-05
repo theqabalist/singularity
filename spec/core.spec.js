@@ -6,7 +6,7 @@
 describe("core", function () {
     "use strict";
     function add(x, y) { return x + y; }
-    var core = require("../core.ref");
+    var core = require("../lib/core.ref");
     describe("partial", function () {
         it("should take a function and some arguments and return a partially applied function", function () {
             var add5 = core.partial(add, 5);

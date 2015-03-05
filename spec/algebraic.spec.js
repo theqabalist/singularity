@@ -8,7 +8,7 @@
 var util = require("util");
 describe("algebraic", function () {
     "use strict";
-    var data = require("../algebraic").data;
+    var data = require("../lib/algebraic").data;
     describe("data type creator", function () {
         var type;
 

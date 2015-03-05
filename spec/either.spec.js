@@ -5,10 +5,10 @@
 */
 describe("Either", function () {
     "use strict";
-    var Either = require("../either").Either,
-        Left = require("../either").Left,
-        Right = require("../either").Right,
-        _ = require("../interfaces");
+    var Either = require("../lib/either").Either,
+        Left = require("../lib/either").Left,
+        Right = require("../lib/either").Right,
+        _ = require("../lib/interfaces");
 
     describe(".from", function () {
         it("should allow arbitrary subtype construction", function () {

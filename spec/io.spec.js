@@ -5,7 +5,7 @@
 */
 describe("IO Type", function () {
     "use strict";
-    var IO = require("../io").IO,
+    var IO = require("../lib/io").IO,
         rand = function () { return IO.from(Math.random()); };
 
     /*jslint unparam: true*/

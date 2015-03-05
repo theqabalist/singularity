@@ -5,7 +5,7 @@
 */
 describe("Reader Type", function () {
     "use strict";
-    var Reader = require("../reader").Reader;
+    var Reader = require("../lib/reader").Reader;
 
     function prop(p) { return function (o) { return o[p]; }; }
 

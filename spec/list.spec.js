@@ -5,7 +5,7 @@
 */
 describe("list", function () {
     "use strict";
-    var List = require("../list"),
+    var List = require("../lib/list"),
         // Cons = List.Cons,
         // Nil = List.Nil,
         ListType = List.List;

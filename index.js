@@ -5,7 +5,7 @@ module.exports = (function (adt, core, iface) {
     "use strict";
     var obj = {
         adt: adt,
-        monad: require("./monad"),
+        monad: require("./lib/monad"),
         fmap: iface.fmap,
         destructure: iface.destructure,
         join: iface.join,
@@ -20,7 +20,7 @@ module.exports = (function (adt, core, iface) {
 
     return obj;
 }(
-    require("./algebraic"),
-    require("./core"),
-    require("./interfaces")
+    require("./lib/algebraic"),
+    require("./lib/core"),
+    require("./lib/interfaces")
 ));

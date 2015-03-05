@@ -1,6 +1,6 @@
 {
   "name": "singularity",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "license": "MIT",
   "author": {
     "name": "Brandon Keown",
@@ -9,13 +9,7 @@
   "main": "index.js",
   "files": [
     "index.js",
-    "algebraic.js",
-    "core.js",
-    "either.js",
-    "interfaces.js",
-    "maybe.js",
-    "io.js",
-    "reader.js"
+    "lib/**/*.js"
   ],
   "repository": {
     "type": "git",
