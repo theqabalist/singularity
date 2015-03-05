@@ -18,7 +18,7 @@ describe("algebraic", function () {
                 None: 0
             })
                 .static("from", function (v, t) {
-                    return v === undefined || v === null ? t.None.from(v) : t.Just.from(v);
+                    return v === undefined || v === null ? t.None.from() : t.Just.from(v);
                 });
         });
 
@@ -60,25 +60,27 @@ describe("algebraic", function () {
         });
 
         it("should allow 'static' helper methods on the parent type", function () {
-            var t = type
-                .static("from", function (v, t) {
-                    return v === undefined || v === null ? t.None.from() : t.Just.from(v);
-                });
+            var t = type;
             expect(t.Maybe.from(5).isJust).toBe(true);
             expect(t.Maybe.from(undefined).isNone).toBe(true);
         });
 
         it("should be able to call static methods from implements context", function () {
             var t = type
-                .static("from", function (v, t2) {
-                    return v === undefined || v === null ? t2.None.from() : t2.Just.from(v);
-                })
                 .implements("bogus", {
                     Just: function (x, t2) { return t2.Maybe.from(x); },
                     None: function (t2) { return t2.Maybe.from(null); }
                 });
             expect(t.Maybe.from(5).bogus().isJust).toBe(true);
             expect(t.Maybe.from(null).bogus().isNone).toBe(true);
+        });
+
+        it("should allow access to base type through instances", function () {
+            var t = type,
+                m1 = t.Just.from(5),
+                m2 = t.None.from();
+            expect(m1.type.from(undefined).isNone).toBe(true);
+            expect(m2.type.from(5).isJust).toBe(true);
         });
 
         describe("abstract", function () {

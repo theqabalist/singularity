@@ -6,7 +6,7 @@
         return name + "." + version + "." + "min";
     }
 
-    var sources = ["*.js", "spec/*.js"];
+    var sources = ["*.js", "lib/*.js", "spec/*.js"];
 
     gulp.task("jshint", function () {
         return gulp
