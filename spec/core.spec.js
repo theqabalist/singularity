@@ -6,7 +6,7 @@
 describe("core", function () {
     "use strict";
     function add(x, y) { return x + y; }
-    var core = require("../core");
+    var core = require("../core.ref");
     describe("partial", function () {
         it("should take a function and some arguments and return a partially applied function", function () {
             var add5 = core.partial(add, 5);
@@ -153,6 +153,12 @@ describe("core", function () {
     describe("merge", function () {
         it("should take an object and copy all the values from another onto it", function () {
             expect(core.merge({a: "a"}, {b: "b"})).toEqual({a: "a", b: "b"});
+        });
+    });
+
+    describe("flatten", function () {
+        it("should take nested arrays and flatten one level", function () {
+            expect(core.flatten([[1, 2], 3])).toEqual([1, 2, 3]);
         });
     });
 });

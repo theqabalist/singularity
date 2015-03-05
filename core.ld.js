@@ -18,6 +18,7 @@ module.exports = (function (core, _) {
         head: _.first,
         tail: _.rest,
         multi: core.multi,
+        map: _.curry(function (f, a) { return _.map(a, function (x) { return f(x); }); }),
         keys: _.keys,
         id: _.identity,
         property: _.property,
@@ -28,7 +29,8 @@ module.exports = (function (core, _) {
         compose: _.compose,
         last: _.last,
         initial: _.initial,
-        merge: _.merge
+        merge: _.merge,
+        flatten: _.flatten
     };
 }(
     require("./core.ref"),

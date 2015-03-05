@@ -195,6 +195,12 @@ module.exports = (function () {
         }, a, b);
     }
 
+    function flatten(a) {
+        return reduce(function (acc, a) {
+            return acc.concat(a);
+        }, [], a);
+    }
+
     return {
         partial: partial,
         partialRight: partialRight,
@@ -207,6 +213,7 @@ module.exports = (function () {
         head: first,
         tail: rest,
         multi: multi,
+        map: curry(map),
         keys: keys,
         id: id,
         property: curry(property),
@@ -217,6 +224,7 @@ module.exports = (function () {
         compose: compose,
         last: last,
         initial: initial,
-        merge: merge
+        merge: merge,
+        flatten: flatten
     };
 }());
