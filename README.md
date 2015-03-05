@@ -14,7 +14,7 @@ Italicized concepts are not yet implemented in any fashion.  This is because dur
 * [IO](docs/io.md)
 * <i>State</i>
 * [Environment/Reader](docs/reader.md)
-* <i>Writer</i>
+* [Writer](docs/writer.md)
 * <i>Continuation</i>
 
 In addition to these documented in wikipedia, additional monads provided are:
