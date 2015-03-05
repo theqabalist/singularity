@@ -1,20 +1,11 @@
 /*global
     window: true
 */
-module.exports = (function (adt, core, either, iface, maybe, io, reader) {
+module.exports = (function (adt, core, iface) {
     "use strict";
     var obj = {
         adt: adt,
-        monad: {
-            Maybe: maybe.Maybe,
-            Just: maybe.Just,
-            None: maybe.None,
-            Either: either.Either,
-            Right: either.Right,
-            Left: either.Left,
-            IO: io.IO,
-            Reader: reader.Reader
-        },
+        monad: require("./monad"),
         fmap: iface.fmap,
         destructure: iface.destructure,
         join: iface.join,
@@ -31,9 +22,5 @@ module.exports = (function (adt, core, either, iface, maybe, io, reader) {
 }(
     require("./algebraic"),
     require("./core"),
-    require("./either"),
-    require("./interfaces"),
-    require("./maybe"),
-    require("./io"),
-    require("./reader")
+    require("./interfaces")
 ));
