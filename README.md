@@ -139,4 +139,4 @@ Available from npm:
 npm install singularity
 ```
 
-Or available in single compressed artifact from [releases](https://github.com/theqabalist/singularity) (good for web usage).
+Or available in single compressed artifact from [releases](https://github.com/theqabalist/singularity/releases) (good for web usage).
