@@ -61,30 +61,58 @@ describe("Reader Type", function () {
                     .flatMap(function (v) {
                         return Reader.asks(prop("envSize"))
                             .flatMap(function (size) {
-                                return Reader.ask()
-                                    .flatMap(function (e) {
-                                        return Reader.from(size + v === Object.keys(e).length + v);
+                                return Reader.local(function () { return {a: 1, b: 2}; })
+                                    .flatMap(function (l) {
+                                        return Reader.from(Reader.ask()
+                                            .flatMap(function (env) {
+                                                return Reader.from(size + v + env.a);
+                                            }).run(l));
+                                    })
+                                    .flatMap(function (v2) {
+                                        return Reader.asks(prop("envSize"))
+                                            .flatMap(function (size2) {
+                                                return Reader.from(v2 + size2);
+                                            });
                                     });
                             });
                     });
-            expect(r.run(env)).toBe(true);
+            expect(r.run(env)).toBe(10);
         });
     });
 
-    describe("#combine", function () {
+    describe("#asks", function () {
         it("should allow for a nicer interface for chaining asks", function () {
             var env = {
                     envSize: 2,
                     random: "other"
                 },
                 r = Reader.from(5)
-                    .combine(prop("envSize"), function (size, v) {
+                    .asks(prop("envSize"), function (size, v) {
                         return Reader.from(size + v);
                     })
-                    .combine(function (env, v) {
-                        return Reader.from(Object.keys(env).length + 5 === v);
+                    .local(function () { return {a: 1, b: 2}; }, function (r) {
+                        return r.ask(function (env, v) {
+                            return Reader.from(env.a + v);
+                        });
+                    })
+                    .asks(prop("envSize"), function (size, v2) {
+                        return Reader.from(size + v2);
                     });
 
+            expect(r.run(env)).toBe(10);
+        });
+    });
+
+    describe("#ask", function () {
+        it("should allow for a nicer version of ask", function () {
+            var env = {
+                    envSize: 2,
+                    random: "other"
+                },
+                r = Reader.from(5)
+                    .ask(function (env, v) {
+                        return Reader.from(Object.keys(env).length + 3 === v);
+                    });
             expect(r.run(env)).toBe(true);
         });
     });
@@ -94,10 +122,11 @@ describe("Reader Type", function () {
             var env = "hello",
                 r = Reader
                     .from(11)
-                    .combine(function (env, v) {
-                        return Reader.from(env.length === v);
-                    })
-                    .local(function (x) { return x + " world"; });
+                    .local(function (x) { return x + " world"; }, function (r) {
+                        return r.ask(function (env, v) {
+                            return Reader.from(env.length === v);
+                        });
+                    });
             expect(r.run(env)).toBe(true);
         });
     });
