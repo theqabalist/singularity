@@ -18,9 +18,8 @@ describe("Array", function () {
 
     describe("fmap", function () {
         it("should implement functor mapping", function () {
-            var mapper = _.fmap(function (x) { return x * 2; }),
-                a = Arr.from([1, 2, 3]);
-            expect(mapper(a).toJs()).toEqual([2, 4, 6]);
+            var a = Arr.from([1, 2, 3]).map(function (x) { return x * 2; });
+            expect(a.toJs()).toEqual([2, 4, 6]);
         });
     });
 
@@ -36,7 +35,7 @@ describe("Array", function () {
     describe("#flatMap", function () {
         it("should implement monadic bind", function () {
             var m = Arr.from([1, 2, 3])
-                .flatMap(function (x) { return [x + 1, x - 1]; });
+                .flatMap(function (x) { return Arr.from([x + 1, x - 1]); });
             expect(m.toJs()).toEqual([2, 0, 3, 1, 4, 2]);
         });
     });

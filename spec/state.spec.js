@@ -21,6 +21,15 @@ describe("State Monad", function () {
         });
     });
 
+    describe("#ap", function () {
+        it("should serially apply monadic values", function () {
+            var s = State.lift(function (a, b) { return a + b; })
+                .ap(State.from(5))
+                .ap(State.from(6));
+            expect(s.evalState(null)).toBe(11);
+        });
+    });
+
     describe(".get", function () {
         it("should provide a constructor to return the state", function () {
             var s = State.get();
