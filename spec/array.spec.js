@@ -5,8 +5,7 @@
 */
 describe("Array", function () {
     "use strict";
-    var Arr = require("../lib/array").Arr,
-        _ = require("../lib/interfaces");
+    var Arr = require("../lib/array").Arr;
     describe(".from", function () {
         it("should take a javascript value and produce an array", function () {
             expect(Arr.from(1).toJs()).toEqual([1]);
