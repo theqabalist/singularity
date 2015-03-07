@@ -57,25 +57,19 @@ describe("Reader Type", function () {
                     envSize: 2,
                     random: "other"
                 },
-                r = Reader.from(5)
-                    .flatMap(function (v) {
-                        return Reader.asks(prop("envSize"))
-                            .flatMap(function (size) {
-                                return Reader.local(function () { return {a: 1, b: 2}; })
-                                    .flatMap(function (l) {
-                                        return Reader.from(Reader.ask()
-                                            .flatMap(function (env) {
-                                                return Reader.from(size + v + env.a);
-                                            }).run(l));
-                                    })
-                                    .flatMap(function (v2) {
-                                        return Reader.asks(prop("envSize"))
-                                            .flatMap(function (size2) {
-                                                return Reader.from(v2 + size2);
-                                            });
-                                    });
+                r = Reader.from(5).flatMap(function (v) {
+                    return Reader.asks(prop("envSize")).flatMap(function (size) {
+                        return Reader.local(function () { return {a: 1, b: 2}; }).flatMap(function (l) {
+                            return Reader.from(Reader.ask().flatMap(function (env) {
+                                return Reader.from(size + v + env.a);
+                            }).run(l));
+                        }).flatMap(function (v2) {
+                            return Reader.asks(prop("envSize")).flatMap(function (size2) {
+                                return Reader.from(v2 + size2);
                             });
+                        });
                     });
+                });
             expect(r.run(env)).toBe(10);
         });
     });
@@ -90,10 +84,8 @@ describe("Reader Type", function () {
                     .asks(prop("envSize"), function (size, v) {
                         return Reader.from(size + v);
                     })
-                    .local(function () { return {a: 1, b: 2}; }, function (r) {
-                        return r.ask(function (env, v) {
-                            return Reader.from(env.a + v);
-                        });
+                    .local(function () { return {a: 1, b: 2}; }, function (env, v) {
+                        return Reader.from(env.a + v);
                     })
                     .asks(prop("envSize"), function (size, v2) {
                         return Reader.from(size + v2);
@@ -122,10 +114,8 @@ describe("Reader Type", function () {
             var env = "hello",
                 r = Reader
                     .from(11)
-                    .local(function (x) { return x + " world"; }, function (r) {
-                        return r.ask(function (env, v) {
-                            return Reader.from(env.length === v);
-                        });
+                    .local(function (x) { return x + " world"; }, function (env, v) {
+                        return Reader.from(env.length === v);
                     });
             expect(r.run(env)).toBe(true);
         });
