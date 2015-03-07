@@ -12,7 +12,7 @@ Italicized concepts are not yet implemented in any fashion.  This is because dur
 
 * [Maybe/Option](docs/maybe.md)
 * [IO](docs/io.md)
-* <i>State</i>
+* [State](docs/state.md)
 * [Environment/Reader](docs/reader.md)
 * [Writer](docs/writer.md)
 * <i>Continuation</i>
@@ -38,7 +38,7 @@ On the type constructors are provided
 On the types proper are provided
 
 * destructure (provides basic type pattern matched dispatch)
-* from (available where sensible, acts as a semi-intelligent constructor or return function)
+* from (return function)
 * lift (lifts a function into a monadically aware function)
 
 ## <i>Monad Transformers</i>

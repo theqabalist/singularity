@@ -7,5 +7,5 @@ This type no public constructors, it is abstract.  A factory is provided as IO.f
 ## Usage
 Please see [here](../examples/io.example.js)
 
-## $ Method
+## #$(initial)
 This method is used to actually performed the described IO type.

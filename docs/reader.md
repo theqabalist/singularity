@@ -12,7 +12,7 @@ This type has no public constructors, it is abstract.  A few factories exist:
 ## Interface
 Aside from the standard ```fmap```, ```ap```, and ```flatMap```, the Reader type has a few more helpers.
 
-### #ask, #asks, #local
+### #ask, #asks(f), #local(f)
 These methods exist to provide a more pleasant code structure than using the constructors directly.  It takes this
 
 ```javascript
@@ -65,7 +65,10 @@ var env = {
 expect(r.run(env)).toBe(10);
 ```
 
-Which is basically to say that they are special versions of flatMap that allow you to do two things at once so you don't have to nest things to maintain context for combinatorial operations.
+Which is basically to say that they are special versions of flatMap that allow you to do two things at once so you don't
+have to nest things to maintain context for combinatorial operations. However, there are limitations
+to this approach which is namely that a call to ```ask```, ```asks```, or ```local``` is only good for the function it is used in.
+If a value is required by a subsequent chained call, then nesting will be required.
 
 ### #local
 The local method exists to allow modification of the value provided to the reader.

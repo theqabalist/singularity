@@ -4,8 +4,8 @@ Represents a manner by which to collect auxiliary output during calculation.
 ## Construction
 This type has no public constructors, it is abstract.  A few factories exist:
 
-* Writer.from(zero, v)
-* Writer.typed -- for providing the monoidal type ahead of time
+* Writer.from(zero, val)
+* Writer.typed(mType).from(val) -- for providing the monoidal type ahead of time
 
 Unlike other monads, this type requires a particular interface on the collector type, which is that it needs to be
 monoidal, which is to say it needs to supply an mzero on the type, which returns an instance which must define mappend.
@@ -49,8 +49,8 @@ It's not a huge gain, but it makes the code a little bit more readable without t
 ## Interface
 Aside from the standard ```fmap```, ```ap```, and ```flatMap```, the Writer type has a few more helpers.
 
-### #output
+### #output()
 Is used to retrieve the monoidal collector.
 
-### #data
+### #data()
 Is used to retrieve the value.

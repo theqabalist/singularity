@@ -5,7 +5,8 @@ Represents a value which may or may not exist.  Semantically, operations continu
 ## Construction
 This type has two public constructors which are ```Just``` and ```None``` which take 1 argument and 0 arguments respectively.
 
-However, there is also a semi-intelligent constructor on the Maybe itself, which will coerce based on existence of value.  Any value that is ```undefined``` or ```null``` is a None and everything else is a Just.
+However, there is also a semi-intelligent constructor on the Maybe itself, which will coerce based on existence of value.
+Any value that is ```undefined``` or ```null``` is a None and everything else is a Just.
 
 ```javascript
 var s = require("singularity").monad,
