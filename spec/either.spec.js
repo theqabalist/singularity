@@ -44,15 +44,15 @@ describe("Either", function () {
         });
     });
 
-    describe("#flatMap", function () {
+    describe("#mbind", function () {
         it("should apply the contained value to a function", function () {
             var m = Right.from(5),
-                bound = m.flatMap(function (x) { return Right.from(x + 5); }),
-                bound2 = m.flatMap(function () { return Left.from("error message"); });
+                bound = m.mbind(function (x) { return Right.from(x + 5); }),
+                bound2 = m.mbind(function () { return Left.from("error message"); });
             expect(bound.isRight).toBe(true);
             expect(bound2.isLeft).toBe(true);
             function typeChecked() {
-                return m.flatMap(function (x) { return x; });
+                return m.mbind(function (x) { return x; });
             }
             expect(typeChecked).toThrow();
         });

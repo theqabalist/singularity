@@ -10,7 +10,7 @@ This type has no public constructors, it is abstract.  A few factories exist:
 * Reader.local (see below)
 
 ## Interface
-Aside from the standard ```fmap```, ```ap```, and ```flatMap```, the Reader type has a few more helpers.
+Aside from the standard ```fmap```, ```ap```, and ```mbind```, the Reader type has a few more helpers.
 
 ### #ask, #asks(f), #local(f)
 These methods exist to provide a more pleasant code structure than using the constructors directly.  It takes this
@@ -21,19 +21,19 @@ var env = {
         random: "other"
     },
     r = Reader.from(5)
-        .flatMap(function (v) {
+        .mbind(function (v) {
             return Reader.asks(prop("envSize"))
-                .flatMap(function (size) {
+                .mbind(function (size) {
                     return Reader.local(function () { return {a: 1, b: 2}; })
-                        .flatMap(function (l) {
+                        .mbind(function (l) {
                             return Reader.from(Reader.ask()
-                                .flatMap(function (env) {
+                                .mbind(function (env) {
                                     return Reader.from(size + v + env.a);
                                 }).run(l));
                         })
-                        .flatMap(function (v2) {
+                        .mbind(function (v2) {
                             return Reader.asks(prop("envSize"))
-                                .flatMap(function (size2) {
+                                .mbind(function (size2) {
                                     return Reader.from(v2 + size2);
                                 });
                         });
@@ -65,7 +65,7 @@ var env = {
 expect(r.run(env)).toBe(10);
 ```
 
-Which is basically to say that they are special versions of flatMap that allow you to do two things at once so you don't
+Which is basically to say that they are special versions of mbind that allow you to do two things at once so you don't
 have to nest things to maintain context for combinatorial operations. However, there are limitations
 to this approach which is namely that a call to ```ask```, ```asks```, or ```local``` is only good for the function it is used in.
 If a value is required by a subsequent chained call, then nesting will be required.

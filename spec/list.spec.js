@@ -50,8 +50,8 @@ describe("list", function () {
             function unproject(x) {
                 return ListType.fromArray([x, x]);
             }
-            it("should flatMap", function () {
-                expect(ListType.toArray(ListType.fromArray([1, 2, 3]).flatMap(unproject)))
+            it("should mbind", function () {
+                expect(ListType.toArray(ListType.fromArray([1, 2, 3]).mbind(unproject)))
                     .toEqual([1, 1, 2, 2, 3, 3]);
             });
 

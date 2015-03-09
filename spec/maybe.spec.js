@@ -46,15 +46,15 @@ describe("Maybe", function () {
         });
     });
 
-    describe("#flatMap", function () {
+    describe("#mbind", function () {
         it("should apply the contained value to a function", function () {
             var m = Maybe.from(5),
-                bound = m.flatMap(function (x) { return Maybe.from(x + 5); }),
-                bound2 = m.flatMap(function () { return Maybe.from(undefined); });
+                bound = m.mbind(function (x) { return Maybe.from(x + 5); }),
+                bound2 = m.mbind(function () { return Maybe.from(undefined); });
             expect(bound.isJust).toBe(true);
             expect(bound2.isNone).toBe(true);
             function typeChecked() {
-                return m.flatMap(function (x) { return x; });
+                return m.mbind(function (x) { return x; });
             }
             expect(typeChecked).toThrow();
         });

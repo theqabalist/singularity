@@ -20,7 +20,7 @@
         .ap(rand())
         .ap(fileContentsAsInt("io.txt"))
         .map(times5)
-        .flatMap(putStrLn)
+        .mbind(putStrLn)
         .$();
 }(
     require("fs"),

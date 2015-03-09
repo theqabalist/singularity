@@ -23,8 +23,8 @@ function mult5(v) {
 }
 var aWriter = Writer.typed(Arr),
     w = aWriter.lift(function (a, b) { return a + b; }),
-    m1 = aWriter.from(0).flatMap(add5),
-    m2 = aWriter.from(2).flatMap(mult5);
+    m1 = aWriter.from(0).mbind(add5),
+    m2 = aWriter.from(2).mbind(mult5);
 expect(w.ap(m1).ap(m2).output().toJs()).toEqual(["added 5", "mult by 5"]);
 ```
 
@@ -39,15 +39,15 @@ function mult5(v) {
     return Writer.from(Arr.from("mult by 5"), v * 5);
 }
 var w = Writer.lift(Arr.mzero(), function (a, b) { return a + b; }),
-    m1 = Writer.from(Arr.mzero(), 0).flatMap(add5),
-    m2 = Writer.from(Arr.mzero(), 2).flatMap(mult5);
+    m1 = Writer.from(Arr.mzero(), 0).mbind(add5),
+    m2 = Writer.from(Arr.mzero(), 2).mbind(mult5);
 expect(w.ap(m1).ap(m2).output().toJs()).toEqual(["added 5", "mult by 5"]);
 ```
 
 It's not a huge gain, but it makes the code a little bit more readable without the extra noise of the mzero call.
 
 ## Interface
-Aside from the standard ```fmap```, ```ap```, and ```flatMap```, the Writer type has a few more helpers.
+Aside from the standard ```fmap```, ```ap```, and ```mbind```, the Writer type has a few more helpers.
 
 ### #output()
 Is used to retrieve the monoidal collector.

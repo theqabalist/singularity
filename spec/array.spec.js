@@ -31,10 +31,10 @@ describe("Array", function () {
         });
     });
 
-    describe("#flatMap", function () {
+    describe("#mbind", function () {
         it("should implement monadic bind", function () {
             var m = Arr.from([1, 2, 3])
-                .flatMap(function (x) { return Arr.from([x + 1, x - 1]); });
+                .mbind(function (x) { return Arr.from([x + 1, x - 1]); });
             expect(m.toJs()).toEqual([2, 0, 3, 1, 4, 2]);
         });
     });

@@ -37,15 +37,15 @@ describe("Reader Type", function () {
         });
     });
 
-    describe("#flatMap", function () {
+    describe("#mbind", function () {
         it("should implement monadic bind", function () {
             var r = Reader.from(5)
-                .flatMap(function (t) {
+                .mbind(function (t) {
                     return Reader.from(t * 5);
                 });
             expect(r.run(null)).toBe(25);
             function typeChecked() {
-                return r.flatMap(function (x) { return x; }).run(null);
+                return r.mbind(function (x) { return x; }).run(null);
             }
             expect(typeChecked).toThrow();
         });
@@ -57,14 +57,14 @@ describe("Reader Type", function () {
                     envSize: 2,
                     random: "other"
                 },
-                r = Reader.from(5).flatMap(function (v) {
-                    return Reader.asks(prop("envSize")).flatMap(function (size) {
-                        return Reader.local(function () { return {a: 1, b: 2}; }).flatMap(function (l) {
-                            return Reader.from(Reader.ask().flatMap(function (env) {
+                r = Reader.from(5).mbind(function (v) {
+                    return Reader.asks(prop("envSize")).mbind(function (size) {
+                        return Reader.local(function () { return {a: 1, b: 2}; }).mbind(function (l) {
+                            return Reader.from(Reader.ask().mbind(function (env) {
                                 return Reader.from(size + v + env.a);
                             }).run(l));
-                        }).flatMap(function (v2) {
-                            return Reader.asks(prop("envSize")).flatMap(function (size2) {
+                        }).mbind(function (v2) {
+                            return Reader.asks(prop("envSize")).mbind(function (size2) {
                                 return Reader.from(v2 + size2);
                             });
                         });

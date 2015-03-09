@@ -37,8 +37,8 @@ describe("Writer Type", function () {
     describe("#ap", function () {
         it("should serially apply monadic values", function () {
             var w = Writer.lift(Arr.mzero(), function (a, b) { return a + b; }),
-                m1 = Writer.from(Arr.mzero(), 0).flatMap(add5),
-                m2 = Writer.from(Arr.mzero(), 2).flatMap(mult5);
+                m1 = Writer.from(Arr.mzero(), 0).mbind(add5),
+                m2 = Writer.from(Arr.mzero(), 2).mbind(mult5);
             expect(w.ap(m1).ap(m2).val(getLog)).toEqual(["added 5", "mult by 5"]);
         });
     });
@@ -47,8 +47,8 @@ describe("Writer Type", function () {
         it("should provide a partial constructor, that takes a monoidal type", function () {
             var aWriter = Writer.typed(Arr),
                 w = aWriter.lift(function (a, b) { return a + b; }),
-                m1 = aWriter.from(0).flatMap(add5),
-                m2 = aWriter.from(2).flatMap(mult5);
+                m1 = aWriter.from(0).mbind(add5),
+                m2 = aWriter.from(2).mbind(mult5);
             expect(w.ap(m1).ap(m2).val(getLog)).toEqual(["added 5", "mult by 5"]);
         });
     });

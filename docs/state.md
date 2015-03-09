@@ -18,7 +18,7 @@ This type has numerous factories as well:
 Please see [example1](../examples/state.example1.js) and [example2](../examples/state.example2.js)
 
 ## Interface
-Aside from the standard ```fmap```, ```ap```, and ```flatMap```, the State type has a few more helpers.
+Aside from the standard ```fmap```, ```ap```, and ```mbind```, the State type has a few more helpers.
 
 ### #get(), #gets(f), #put(s), #modify(f)
 These methods exist to provide a more pleasant code structure than using the constructors directly.

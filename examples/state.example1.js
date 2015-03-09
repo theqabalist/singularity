@@ -3,12 +3,12 @@
     "use strict";
     var playGame = _.multi()
         .method(function (x) { return x === ""; }, function () {
-            return State.get().flatMap(function (t) {
+            return State.get().mbind(function (t) {
                 return State.from(t[1]);
             });
         })
         .otherwise(function (str) {
-            return State.get().flatMap(function (t) {
+            return State.get().mbind(function (t) {
                 var x = str[0],
                     xs = str.slice(1),
                     on = t[0],
@@ -28,7 +28,7 @@
                     update = State.put([on, score]);
                     break;
                 }
-                return update.flatMap(function () {
+                return update.mbind(function () {
                     return playGame(xs);
                 });
             });

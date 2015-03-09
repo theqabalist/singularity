@@ -37,10 +37,10 @@ describe("State Monad", function () {
         });
     });
 
-    describe("#flatMap", function () {
+    describe("#mbind", function () {
         it("should implement monadic bind", function () {
-            var s = State.from(5).flatMap(function (t) {
-                return State.get().flatMap(function (v) {
+            var s = State.from(5).mbind(function (t) {
+                return State.get().mbind(function (v) {
                     return State.from(v + t);
                 });
             });
@@ -119,11 +119,11 @@ describe("State Monad", function () {
         it("should provide a nicer version of the constructors", function () {
             var s = State.put({a: "b"})
                 .modify(function (s) { return s.a; })
-                .flatMap(function () { return State.from(5); })
+                .mbind(function () { return State.from(5); })
                 .get(function (s, t) {
                     var newState = {};
                     newState[s] = t;
-                    return State.put(newState).flatMap(function () {
+                    return State.put(newState).mbind(function () {
                         return State.from(t);
                     });
                 })
@@ -139,12 +139,12 @@ describe("State Monad", function () {
             // example ported from https://wiki.haskell.org/State_Monad
             var playGame = _.multi()
                 .method(function (x) { return x === ""; }, function () {
-                    return State.get().flatMap(function (t) {
+                    return State.get().mbind(function (t) {
                         return State.from(t[1]);
                     });
                 })
                 .otherwise(function (str) {
-                    return State.get().flatMap(function (t) {
+                    return State.get().mbind(function (t) {
                         var x = str[0],
                             xs = str.slice(1),
                             on = t[0],
@@ -164,7 +164,7 @@ describe("State Monad", function () {
                             update = State.put([on, score]);
                             break;
                         }
-                        return update.flatMap(function () {
+                        return update.mbind(function () {
                             return playGame(xs);
                         });
                     });

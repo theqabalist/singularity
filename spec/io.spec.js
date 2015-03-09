@@ -30,7 +30,7 @@ describe("IO Type", function () {
                 }),
                 action2 = action
                     .map(function (x) { return Math.floor(x + 5); })
-                    .flatMap(function (a) {
+                    .mbind(function (a) {
                         recorder = a;
                         return IO.from(a);
                     });
@@ -52,16 +52,16 @@ describe("IO Type", function () {
         });
     });
 
-    describe("#flatMap", function () {
+    describe("#mbind", function () {
         it("should implement monadic bind", function () {
             var recorder,
                 action = rand()
-                    .flatMap(function (rand1) {
+                    .mbind(function (rand1) {
                         return rand()
-                            .flatMap(function (rand2) {
+                            .mbind(function (rand2) {
                                 return IO.from(rand1 + rand2);
                             })
-                            .flatMap(function (rand3) {
+                            .mbind(function (rand3) {
                                 recorder = rand3;
                                 return IO.from();
                             });

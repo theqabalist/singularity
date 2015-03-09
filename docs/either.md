@@ -17,7 +17,7 @@ var s = require("singularity").monad,
 console.log(extract(
     myRight
         .map(function (x) { return x + 5; })
-        .flatMap(function (x) {
+        .mbind(function (x) {
             var val;
             try {
                 val = s.Right.from(brittlePIDRead(x));

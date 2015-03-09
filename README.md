@@ -29,7 +29,7 @@ As all monads are applicatives, and all applicatives are functors, the following
 
 * map (functor map)
 * ap (applicative apply)
-* flatMap (monadic bind)
+* mbind (monadic bind)
 
 On the type constructors are provided
 
