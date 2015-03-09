@@ -6,15 +6,15 @@
 describe("IO Type", function () {
     "use strict";
     var IO = require("../lib/io").IO,
-        rand = function () { return IO.from(Math.random()); };
+        rand = function () { return IO.mreturn(Math.random()); };
 
     /*jslint unparam: true*/
     function dummySideEffect() { return Math.random(); }
     /*jslint unparam: false*/
-    describe(".from", function () {
+    describe(".mreturn", function () {
         it("should provide a constructor for a function that wraps a side effect.", function () {
             var recorder,
-                action = IO.from(function () {
+                action = IO.mreturn(function () {
                     recorder = dummySideEffect();
                 });
             action.$();
@@ -25,14 +25,14 @@ describe("IO Type", function () {
     describe("fmap", function () {
         it("should implement functor mapping", function () {
             var recorder,
-                action = IO.from(function () {
+                action = IO.mreturn(function () {
                     return Math.random();
                 }),
                 action2 = action
                     .map(function (x) { return Math.floor(x + 5); })
                     .mbind(function (a) {
                         recorder = a;
-                        return IO.from(a);
+                        return IO.mreturn(a);
                     });
             expect(recorder).toBeUndefined();
             action2.$();
@@ -59,11 +59,11 @@ describe("IO Type", function () {
                     .mbind(function (rand1) {
                         return rand()
                             .mbind(function (rand2) {
-                                return IO.from(rand1 + rand2);
+                                return IO.mreturn(rand1 + rand2);
                             })
                             .mbind(function (rand3) {
                                 recorder = rand3;
-                                return IO.from();
+                                return IO.mreturn();
                             });
                     });
             expect(recorder).toBeUndefined();

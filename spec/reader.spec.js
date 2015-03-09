@@ -9,16 +9,16 @@ describe("Reader Type", function () {
 
     function prop(p) { return function (o) { return o[p]; }; }
 
-    describe(".from", function () {
+    describe(".mreturn", function () {
         it("should take a value and return a trivial reader", function () {
-            var r = Reader.from(5);
+            var r = Reader.mreturn(5);
             expect(r.run(null)).toBe(5);
         });
     });
 
     describe("fmap", function () {
         it("should implement functor mapping", function () {
-            var r = Reader.from(5);
+            var r = Reader.mreturn(5);
             expect(r.map(function (x) { return x * 5; }).run(null)).toBe(25);
         });
     });
@@ -39,9 +39,9 @@ describe("Reader Type", function () {
 
     describe("#mbind", function () {
         it("should implement monadic bind", function () {
-            var r = Reader.from(5)
+            var r = Reader.mreturn(5)
                 .mbind(function (t) {
-                    return Reader.from(t * 5);
+                    return Reader.mreturn(t * 5);
                 });
             expect(r.run(null)).toBe(25);
             function typeChecked() {
@@ -57,15 +57,15 @@ describe("Reader Type", function () {
                     envSize: 2,
                     random: "other"
                 },
-                r = Reader.from(5).mbind(function (v) {
+                r = Reader.mreturn(5).mbind(function (v) {
                     return Reader.asks(prop("envSize")).mbind(function (size) {
                         return Reader.local(function () { return {a: 1, b: 2}; }).mbind(function (l) {
-                            return Reader.from(Reader.ask().mbind(function (env) {
-                                return Reader.from(size + v + env.a);
+                            return Reader.mreturn(Reader.ask().mbind(function (env) {
+                                return Reader.mreturn(size + v + env.a);
                             }).run(l));
                         }).mbind(function (v2) {
                             return Reader.asks(prop("envSize")).mbind(function (size2) {
-                                return Reader.from(v2 + size2);
+                                return Reader.mreturn(v2 + size2);
                             });
                         });
                     });
@@ -80,15 +80,15 @@ describe("Reader Type", function () {
                     envSize: 2,
                     random: "other"
                 },
-                r = Reader.from(5)
+                r = Reader.mreturn(5)
                     .asks(prop("envSize"), function (size, v) {
-                        return Reader.from(size + v);
+                        return Reader.mreturn(size + v);
                     })
                     .local(function () { return {a: 1, b: 2}; }, function (env, v) {
-                        return Reader.from(env.a + v);
+                        return Reader.mreturn(env.a + v);
                     })
                     .asks(prop("envSize"), function (size, v2) {
-                        return Reader.from(size + v2);
+                        return Reader.mreturn(size + v2);
                     });
 
             expect(r.run(env)).toBe(10);
@@ -101,9 +101,9 @@ describe("Reader Type", function () {
                     envSize: 2,
                     random: "other"
                 },
-                r = Reader.from(5)
+                r = Reader.mreturn(5)
                     .ask(function (env, v) {
-                        return Reader.from(Object.keys(env).length + 3 === v);
+                        return Reader.mreturn(Object.keys(env).length + 3 === v);
                     });
             expect(r.run(env)).toBe(true);
         });
@@ -113,9 +113,9 @@ describe("Reader Type", function () {
         it("should provide a way to modify the environment", function () {
             var env = "hello",
                 r = Reader
-                    .from(11)
+                    .mreturn(11)
                     .local(function (x) { return x + " world"; }, function (env, v) {
-                        return Reader.from(env.length === v);
+                        return Reader.mreturn(env.length === v);
                     });
             expect(r.run(env)).toBe(true);
         });

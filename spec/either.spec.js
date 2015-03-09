@@ -10,7 +10,7 @@ describe("Either", function () {
         Right = require("../lib/either").Right,
         _ = require("../lib/interfaces");
 
-    describe(".from", function () {
+    describe(".mreturn", function () {
         it("should allow arbitrary subtype construction", function () {
             var l = Left.from(undefined),
                 l2 = Left.from(5),

@@ -7,16 +7,16 @@ describe("State Monad", function () {
     "use strict";
     var State = require("../lib/state").State,
         _ = require("../lib/core");
-    describe(".from", function () {
+    describe(".mreturn", function () {
         it("should provide a data constructor", function () {
-            var s = State.from(5);
+            var s = State.mreturn(5);
             expect(s.run(2)).toEqual([5, 2]);
         });
     });
 
     describe("fmap", function () {
         it("should implement functor mapping", function () {
-            var s = State.from(5).map(function (t) { return t * 5; });
+            var s = State.mreturn(5).map(function (t) { return t * 5; });
             expect(s.run(2)).toEqual([25, 2]);
         });
     });
@@ -24,8 +24,8 @@ describe("State Monad", function () {
     describe("#ap", function () {
         it("should serially apply monadic values", function () {
             var s = State.lift(function (a, b) { return a + b; })
-                .ap(State.from(5))
-                .ap(State.from(6));
+                .ap(State.mreturn(5))
+                .ap(State.mreturn(6));
             expect(s.evalState(null)).toBe(11);
         });
     });
@@ -39,9 +39,9 @@ describe("State Monad", function () {
 
     describe("#mbind", function () {
         it("should implement monadic bind", function () {
-            var s = State.from(5).mbind(function (t) {
+            var s = State.mreturn(5).mbind(function (t) {
                 return State.get().mbind(function (v) {
-                    return State.from(v + t);
+                    return State.mreturn(v + t);
                 });
             });
             expect(s.run(2)).toEqual([7, 2]);
@@ -71,14 +71,14 @@ describe("State Monad", function () {
 
     describe("#evalState", function () {
         it("should return the result of the computation", function () {
-            var s = State.from(5);
+            var s = State.mreturn(5);
             expect(s.evalState(10)).toBe(5);
         });
     });
 
     describe("#execState", function () {
         it("should return the state of the computation", function () {
-            var s = State.from(5);
+            var s = State.mreturn(5);
             expect(s.execState(10)).toBe(10);
         });
     });
@@ -92,26 +92,26 @@ describe("State Monad", function () {
             });
 
             it("should provide get inline", function () {
-                var s = State.from(5)
+                var s = State.mreturn(5)
                     .get(function (s, t) {
-                        return State.from(s + t);
+                        return State.mreturn(s + t);
                     });
                 expect(s.evalState(2)).toBe(7);
             });
 
             it("should provide gets inline", function () {
-                var s = State.from(5)
+                var s = State.mreturn(5)
                     .gets(function (s) { return s.a; }, function (a, t) {
-                        return State.from(a + t);
+                        return State.mreturn(a + t);
                     });
                 expect(s.evalState({a: 2})).toBe(7);
             });
 
             it("should provide puts inline", function () {
-                var s = State.from(5)
+                var s = State.mreturn(5)
                     .put({a: 2})
                     .gets(function (s) { return s.a; }, function (a, t) {
-                        return State.from(a + t);
+                        return State.mreturn(a + t);
                     });
                 expect(s.evalState({a: 3})).toBe(7);
             });
@@ -119,16 +119,16 @@ describe("State Monad", function () {
         it("should provide a nicer version of the constructors", function () {
             var s = State.put({a: "b"})
                 .modify(function (s) { return s.a; })
-                .mbind(function () { return State.from(5); })
+                .mbind(function () { return State.mreturn(5); })
                 .get(function (s, t) {
                     var newState = {};
                     newState[s] = t;
                     return State.put(newState).mbind(function () {
-                        return State.from(t);
+                        return State.mreturn(t);
                     });
                 })
                 .gets(function (s) { return s.b; }, function (b, t) {
-                    return State.from(b + t);
+                    return State.mreturn(b + t);
                 });
             expect(s.evalState()).toBe(10);
         });
@@ -140,7 +140,7 @@ describe("State Monad", function () {
             var playGame = _.multi()
                 .method(function (x) { return x === ""; }, function () {
                     return State.get().mbind(function (t) {
-                        return State.from(t[1]);
+                        return State.mreturn(t[1]);
                     });
                 })
                 .otherwise(function (str) {
