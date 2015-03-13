@@ -4,9 +4,9 @@
     expect: true
 */
 describe("Continuation Monad", function () {
+    "use strict";
     var type = require("../lib/continuation"),
-        Cont = type.Cont,
-        cont = type.cont;
+        Cont = type.Cont;
     describe(".mreturn", function () {
         it("should provide a monadic return function", function () {
             var c = Cont.mreturn(5);
