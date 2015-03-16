@@ -4,7 +4,7 @@ Represents a calculation which relies on a value provided later.
 ## Construction
 This type has no public constructors, it is abstract.  A few factories exist:
 
-* Reader.from
+* Reader.mreturn
 * Reader.ask (see below)
 * Reader.asks (see below)
 * Reader.local (see below)
@@ -20,25 +20,17 @@ var env = {
         envSize: 2,
         random: "other"
     },
-    r = Reader.from(5)
-        .mbind(function (v) {
-            return Reader.asks(prop("envSize"))
-                .mbind(function (size) {
-                    return Reader.local(function () { return {a: 1, b: 2}; })
-                        .mbind(function (l) {
-                            return Reader.from(Reader.ask()
-                                .mbind(function (env) {
-                                    return Reader.from(size + v + env.a);
-                                }).run(l));
-                        })
-                        .mbind(function (v2) {
-                            return Reader.asks(prop("envSize"))
-                                .mbind(function (size2) {
-                                    return Reader.from(v2 + size2);
-                                });
-                        });
-                });
+    r = Reader.asks(prop("envSize")).mbind(function (size) {
+        return Reader.local(function () { return {a: 1, b: 2}; }, Reader.mreturn(5).mbind(function (v) {
+            return Reader.ask().mbind(function (env) {
+                return Reader.mreturn(size + v + env.a);
+            });
+        })).mbind(function (v2) {
+            return Reader.asks(prop("envSize")).mbind(function (size2) {
+                return Reader.mreturn(v2 + size2);
+            });
         });
+    });
 expect(r.run(env)).toBe(10);
 ```
 
@@ -49,17 +41,17 @@ var env = {
         envSize: 2,
         random: "other"
     },
-    r = Reader.from(5)
+    r = Reader.mreturn(5)
         .asks(prop("envSize"), function (size, v) {
-            return Reader.from(size + v);
+            return Reader.mreturn(size + v);
         })
-        .local(function () { return {a: 1, b: 2}; }, function (r) {
-            return r.ask(function (env, v) {
-                return Reader.from(env.a + v);
+        .local(function () { return {a: 1, b: 2}; }, function (v) {
+            return Reader.ask().mbind(function (env) {
+                return Reader.mreturn(env.a + v);
             });
         })
         .asks(prop("envSize"), function (size, v2) {
-            return Reader.from(size + v2);
+            return Reader.mreturn(size + v2);
         });
 
 expect(r.run(env)).toBe(10);
@@ -70,16 +62,16 @@ have to nest things to maintain context for combinatorial operations. However, t
 to this approach which is namely that a call to ```ask```, ```asks```, or ```local``` is only good for the function it is used in.
 If a value is required by a subsequent chained call, then nesting will be required.
 
-### #local
+### #local(f)
 The local method exists to allow modification of the value provided to the reader.
 
 ```javascript
 var env = "hello",
     r = Reader
-        .from(11)
-        .local(function (x) { return x + " world"; }, function (r) {
-            return r.ask(function (env, v) {
-                return Reader.from(env.length === v);
+        .mreturn(11)
+        .local(function (x) { return x + " world"; }, function (v) {
+            return Reader.ask().mbind(function (e) {
+                return Reader.mreturn(e.length === v);
             });
         });
 expect(r.run(env)).toBe(true);
@@ -88,5 +80,5 @@ expect(r.run(env)).toBe(true);
 Evaluations in the local context, as expected, only extend to the reader provided by the second function.  The
 environment the resumes its previous state.
 
-### #run
+### #run(e)
 As the reader represents a computation dependent on a provided value, ```run``` is the way to provide that value.

@@ -8,7 +8,7 @@ a function of type ```s -> (t, s)```.
 
 This type has numerous factories as well:
 
-* State.from
+* State.mreturn
 * State.get (see below) -- retrieve the state
 * State.gets (see below) -- query the state
 * State.put (see below) -- replace the state
