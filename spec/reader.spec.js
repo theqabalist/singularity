@@ -57,16 +57,14 @@ describe("Reader Type", function () {
                     envSize: 2,
                     random: "other"
                 },
-                r = Reader.mreturn(5).mbind(function (v) {
-                    return Reader.asks(prop("envSize")).mbind(function (size) {
-                        return Reader.local(function () { return {a: 1, b: 2}; }).mbind(function (l) {
-                            return Reader.mreturn(Reader.ask().mbind(function (env) {
-                                return Reader.mreturn(size + v + env.a);
-                            }).run(l));
-                        }).mbind(function (v2) {
-                            return Reader.asks(prop("envSize")).mbind(function (size2) {
-                                return Reader.mreturn(v2 + size2);
-                            });
+                r = Reader.asks(prop("envSize")).mbind(function (size) {
+                    return Reader.local(function () { return {a: 1, b: 2}; }, Reader.mreturn(5).mbind(function (v) {
+                        return Reader.ask().mbind(function (env) {
+                            return Reader.mreturn(size + v + env.a);
+                        });
+                    })).mbind(function (v2) {
+                        return Reader.asks(prop("envSize")).mbind(function (size2) {
+                            return Reader.mreturn(v2 + size2);
                         });
                     });
                 });
@@ -84,8 +82,10 @@ describe("Reader Type", function () {
                     .asks(prop("envSize"), function (size, v) {
                         return Reader.mreturn(size + v);
                     })
-                    .local(function () { return {a: 1, b: 2}; }, function (env, v) {
-                        return Reader.mreturn(env.a + v);
+                    .local(function () { return {a: 1, b: 2}; }, function (v) {
+                        return Reader.ask().mbind(function (env) {
+                            return Reader.mreturn(env.a + v);
+                        });
                     })
                     .asks(prop("envSize"), function (size, v2) {
                         return Reader.mreturn(size + v2);
@@ -110,12 +110,24 @@ describe("Reader Type", function () {
     });
 
     describe("#local", function () {
+        it("should exist in a static form", function () {
+            var env = "hello",
+                r1 = Reader.mreturn(11).mbind(function (v) {
+                    return Reader.ask().mbind(function (e) {
+                        return Reader.mreturn(e.length === v);
+                    });
+                }),
+                r2 = Reader.local(function (x) { return x + " world"; }, r1);
+            expect(r2.run(env)).toBe(true);
+        });
         it("should provide a way to modify the environment", function () {
             var env = "hello",
                 r = Reader
                     .mreturn(11)
-                    .local(function (x) { return x + " world"; }, function (env, v) {
-                        return Reader.mreturn(env.length === v);
+                    .local(function (x) { return x + " world"; }, function (v) {
+                        return Reader.ask().mbind(function (e) {
+                            return Reader.mreturn(e.length === v);
+                        });
                     });
             expect(r.run(env)).toBe(true);
         });
