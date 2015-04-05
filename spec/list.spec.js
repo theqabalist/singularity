@@ -59,9 +59,6 @@ describe("list", function () {
                 expect(ListType.toArray(ListType.mreturn(1))).toEqual([1]);
             });
 
-            // it("should be constrained under the monad laws", function() {
-            //
-            // });
         });
         describe("Foldable", function () {
             function add(x, y) { return x + y; }
