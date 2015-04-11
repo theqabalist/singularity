@@ -12,8 +12,10 @@ module.exports = (function (adt) {
             return t.Now.from(v);
         })
         .static("delay", function (f, t) {
-            return t.Async.from(function (cb) {
-                cb(f);
+            return t.async(function (cb) {
+                setTimeout(function () {
+                    cb(f());
+                }, 0);
             });
         })
         .static("async", function (f, t) {
