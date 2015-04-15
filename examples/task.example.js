@@ -1,17 +1,7 @@
 /*jslint stupid: true*/
-(function (fs, Task, Either, Left, Right) {
+(function (fs, Task, Either) {
     "use strict";
-    function readFile(path, options) {
-        return Task.callback(function (handle) {
-            fs.readFile(path, options, function (err, data) {
-                if (err) {
-                    handle(Left.from(err));
-                } else {
-                    handle(Right.from(data));
-                }
-            });
-        });
-    }
+    var readFile = Task.node(fs.readFile);
 
     // Example
     readFile("examples/io.txt", {encoding: "utf8"})
