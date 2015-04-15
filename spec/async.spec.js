@@ -11,10 +11,30 @@ describe("Async", function () {
             expect(Async.mreturn(5).isImmediate).toEqual(true);
         });
     });
-    describe("#listen", function () {
+    describe("#$", function () {
         it("should immediately call the response for points", function (done) {
             Async.mreturn(5).$(function (a) {
                 expect(a).toEqual(5);
+                done();
+            });
+        });
+        it("should execute delayed event for Callbacks", function (done) {
+            Async.callback(function (cb) {
+                setTimeout(function () {
+                    cb(42);
+                }, 0);
+            }).$(function (a) {
+                expect(a).toEqual(42);
+                done();
+            });
+        });
+        it("should handle bind functions correctly", function (done) {
+            Async.mreturn(5).mbind(function (x) {
+                return Async.callback(function (cb) {
+                    cb(x + 1);
+                });
+            }).$(function (a) {
+                expect(a).toEqual(6);
                 done();
             });
         });

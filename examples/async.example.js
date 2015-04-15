@@ -1,51 +1,18 @@
 /*jslint stupid: true*/
-(function (fs, Async) {
+(function (Async) {
     "use strict";
-    function left(v) {
-        return v;
-    }
-    function right(v) {
-        return v;
-    }
-    function readFile(path, options) {
-        return Async.callback(function (handle) {
-            fs.readFile(path, options, function (err, data) {
-                if (err) {
-                    handle(left(err));
-                } else {
-                    handle(right(data));
-                }
-            });
+    function think(v) {
+        return Async.callback(function (cb) {
+            setTimeout(function () {
+                cb(v);
+            }, 1000);
         });
     }
 
-    function writeFile(path, options) {
-        return function (data) {
-            return Async.callback(function (handle) {
-                fs.writeFile(path, data, options, function (err, data) {
-                    if (err) {
-                        handle(left(err));
-                    } else {
-                        handle(right(data));
-                    }
-                });
-            });
-        };
-    }
+    think(1).mbind(function (x) {
+        return think(x + 1);
+    }).$(console.log);
 
-    // Example
-    var task = readFile("io.txt", {encoding: "utf8"})
-        .flatMap(writeFile("io2.txt", {encoding: "utf8"}));
-
-    task.run(function (result) {
-        console.log(result);
-    });
-
-    return {
-        rf: readFile,
-        wf: writeFile
-    };
 }(
-    require("fs"),
-    require("../async")
+    require("../lib/async").Async
 ));
