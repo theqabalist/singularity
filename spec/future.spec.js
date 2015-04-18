@@ -3,15 +3,15 @@
     it: true,
     expect: true
 */
-describe("Task", function () {
+describe("Future", function () {
     "use strict";
-    var Task = require("../lib/task").Task,
+    var Future = require("../lib/future").Future,
         Either = require("../lib/either").Either,
         _ = require("../lib/core"),
         eitherValue = Either.destructure().Left(_.id).Right(_.id);
     describe("#mreturn", function () {
         it("should produce a right either during callback", function (done) {
-            Task.mreturn(5).$(function (r) {
+            Future.mreturn(5).$(function (r) {
                 expect(r.isRight).toEqual(true);
                 done();
             });
@@ -19,13 +19,13 @@ describe("Task", function () {
     });
     describe("#fail", function () {
         it("should produce a left with an error", function (done) {
-            Task.fail(5).$(function (r) {
+            Future.fail(5).$(function (r) {
                 expect(r.isLeft).toEqual(true);
                 done();
             });
         });
         it("should propagate through", function (done) {
-            Task.fail(5).map(function (x) { return x + 1; })
+            Future.fail(5).map(function (x) { return x + 1; })
                 .$(function (r) {
                     expect(r.isLeft).toEqual(true);
                     done();
@@ -34,7 +34,7 @@ describe("Task", function () {
     });
     describe("#handleE", function () {
         it("should do nothing in the case of success", function (done) {
-            Task.mreturn(5).handleE(_.constant(Task.mreturn(4)))
+            Future.mreturn(5).handleE(_.constant(Future.mreturn(4)))
                 .$(function (r) {
                     expect(r.isRight).toEqual(true);
                     expect((eitherValue(r)))
@@ -43,7 +43,7 @@ describe("Task", function () {
                 });
         });
         it("should offer the chance to correct errors on failure", function (done) {
-            Task.fail(5).handleE(_.constant(Task.mreturn(4)))
+            Future.fail(5).handleE(_.constant(Future.mreturn(4)))
                 .$(function (r) {
                     expect(r.isRight).toEqual(true);
                     expect(eitherValue(r))
@@ -54,15 +54,15 @@ describe("Task", function () {
     });
     describe("#resumeE", function () {
         it("should do nothing in the case of success", function (done) {
-            Task.mreturn(5).resumeE(Task.mreturn(4))
+            Future.mreturn(5).resumeE(Future.mreturn(4))
                 .$(function (r) {
                     expect(r.isRight).toEqual(true);
                     expect(eitherValue(r)).toEqual(5);
                     done();
                 });
         });
-        it("should return the value from the passed task in the case of failure", function (done) {
-            Task.fail(5).resumeE(Task.mreturn(4))
+        it("should return the value from the passed Future in the case of failure", function (done) {
+            Future.fail(5).resumeE(Future.mreturn(4))
                 .$(function (r) {
                     expect(r.isRight).toEqual(true);
                     expect(eitherValue(r)).toEqual(4);
